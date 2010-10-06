@@ -1,0 +1,151 @@
+.AddImage
+{
+  line-height: 0px;
+  font-size: 0pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.AcceptButtonStyle
+{
+  color: #ffffff;
+  font-family: Verdana, Arial;
+  background-color: #3b5998; 
+  border: 1px solid; 
+  border-color: #333333; 
+  text-decoration: none;
+  font-weight: bold;	
+  font-size: 10pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.DeclineButtonStyle
+{
+  color: #333333;
+  font-family: Verdana, Arial;
+  background-color: #f7f7f7; 
+  border: 1px solid; 
+  border-color: #cccccc; 
+  text-decoration: none;
+  font-weight: bold;	
+  font-size: 10pt;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.FAITHHomeLink
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  line-height: 13px;
+  text-align: left;
+}
+.FAITHDescriptionContent
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  font-weight: bolder;
+  color: #3b5998;
+  border-right: #3b5998 1px solid;
+  border-top: #3b5998 1px solid;
+  border-left: #3b5998 1px solid;
+  border-bottom: #3b5998 1px solid;
+}
+.FAITHHeaderTitle
+{
+  font-family: Verdana, Arial;
+  font-size: 13pt;
+  color: #FFFFFF;
+  font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+}
+.FAITHHomeTitle
+{
+  font-family: Verdana, Arial;
+  font-size: 13pt;
+  color: #3b5998;
+  font-weight: bold;
+  line-height: 28px;
+  text-align: center;
+}
+.FAITHHomeDescription
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  color: #555555;
+  line-height: 15px;
+}
+.fbbluebox  
+{  
+  background-color: #eceff6;  
+  border: 1px solid #d4dae8;  
+  color: #333333;  
+  padding: 10px;  
+  font-size: 13px;  
+  font-weight: bold;  
+}
+.fberrorbox  
+{  
+    background-color: #ffebe8;  
+    border: 1px solid #dd3c10;  
+    color: #333333;  
+    padding: 10px;  
+    font-size: 13px;  
+    font-weight: bold;  
+}
+.PageTitle
+{
+  font-family: Verdana, Arial;
+  font-size: 11pt;
+  font-weight: bolder;
+  color: #333333;
+  text-align: left;
+  line-height: 35px;
+}
+.PageTitleLink
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  color: #666666;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: #AAAAAA 1px solid;
+}
+.SettingTable
+{
+  position:absolute;
+  z-index: 2;
+  left: 594px;
+  border-right:#3b5998 3px solid;
+  border-bottom:#3b5998 3px solid;
+  border-left:#3b5998 3px solid;
+  background-color:#ffffff;
+  width:150px;
+  height:250px;
+}
+.SettingTableClear
+{
+  position:absolute;
+  z-index: -2;
+  visibility:hidden;
+}
+.TransformTitleLink
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  color: #666666;
+  padding-left: 3px;
+  padding-right: 10px;
+  text-decoration:underline;
+}
+.TransformTitleDescription
+{
+  font-family: Verdana, Arial;
+  font-size: 8pt;
+  color: #333333;
+  padding-left: 8px;
+  padding-right: 10px;
+}
