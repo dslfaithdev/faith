@@ -17,6 +17,8 @@
 	{
 	mysqlSetup($db);
 	$facebook = new Facebook($appapikey, $appsecret);
+	
+	// This is from old library right??
 	$user_id = $facebook->require_login();
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
