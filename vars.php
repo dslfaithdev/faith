@@ -35,4 +35,4 @@ $listFile = "adjacencylist.txt";
 $pathVsTrustWeight = 0.5;
 $trustThreshold = 0.4;
 
-//Test Mercurial by Ray
+// Test Again By RAY
