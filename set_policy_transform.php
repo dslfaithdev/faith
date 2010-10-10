@@ -53,16 +53,16 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy.php">at RESTful API Level</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy.php">at RESTful API Level</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy_transform.php">Network Transformation</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform.php">Network Transformation</a>
 		(<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_add.php">Add</a></font>
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_add.php">Add</a></font>
 		 <font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_remove.php">Hide</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_remove.php">Hide</a></font>)
 		 (<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
 		</td>
 	</tr>
 	</table>
@@ -87,10 +87,10 @@
 			<table cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<td width="8%" height="45px">
-				<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/addconn.gif" />
+				<img src="<?php echo $source_server_url; ?>image/addconn.gif" />
 				</td>
 				<td width="92%" class="TransformTitleLink">
-				<a href="http://apps.facebook.com/dsl_faith/set_policy_transform_add.php">Add Virtual Friendship Connections</a>
+				<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_add.php">Add Virtual Friendship Connections</a>
 				</td>
 			</tr>
 			<tr>
@@ -101,10 +101,10 @@
 			</tr>
 			<tr>
 				<td width="8%" height="45px">
-				<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/addconnbyfile.gif" />
+				<img src="<?php echo $source_server_url; ?>image/addconnbyfile.gif" />
 				</td>
 				<td width="92%" class="TransformTitleLink">
-				<a href="http://apps.facebook.com/dsl_faith/set_policy_transform_addbyfile.php">Add Virtual Friendship Connections by Files</a>
+				<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_addbyfile.php">Add Virtual Friendship Connections by Files</a>
 				</td>
 			</tr>
 			<tr>
@@ -119,10 +119,10 @@
 			<table cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<td width="8%" height="45px">
-				<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/addconn.gif" />
+				<img src="<?php echo $source_server_url; ?>image/addconn.gif" />
 				</td>
 				<td width="92%" class="TransformTitleLink">
-				<a href="http://apps.facebook.com/dsl_faith/set_policy_transform_remove.php">Remove Virtual Friendship Connections</a>
+				<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_remove.php">Remove Virtual Friendship Connections</a>
 				</td>
 			</tr>
 			<tr>
@@ -133,10 +133,10 @@
 			</tr>
 			<tr>
 				<td width="8%" height="45px">
-				<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/remconnbyfile.gif" />
+				<img src="<?php echo $source_server_url; ?>image/remconnbyfile.gif" />
 				</td>
 				<td width="92%" class="TransformTitleLink">
-				<a href="http://apps.facebook.com/dsl_faith/set_policy_transform_rembyfile.php">Remove Virtual Friendship Connections by Files</a>
+				<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_rembyfile.php">Remove Virtual Friendship Connections by Files</a>
 				</td>
 			</tr>
 			<tr>

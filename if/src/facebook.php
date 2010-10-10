@@ -425,16 +425,19 @@ class Facebook
    * @return String the URL for the login flow
    */
   public function getLoginUrl($params=array()) {
+  	
+  	GLOBAL $facebook_iframe_canvas_page_url;
+  	
     $currentUrl = $this->getCurrentUrl();
     return $this->getUrl(
       'www',
       'login.php',
       array_merge(array(
         'api_key'         => $this->getAppId(),
-        'cancel_url'      => 'http://apps.facebook.com/dsl_faith_iframe/',//$currentUrl,
+        'cancel_url'      => $facebook_iframe_canvas_page_url,//$currentUrl,
         'display'         => 'page',
         'fbconnect'       => 1,
-        'next'            => 'http://apps.facebook.com/dsl_faith_iframe/',//$currentUrl,
+        'next'            => $facebook_iframe_canvas_page_url,//$currentUrl,
         'return_session'  => 1,
         'session_version' => 3,
         'v'               => '1.0',
@@ -638,7 +641,8 @@ class Facebook
     }
     curl_close($ch);
     
-    $myFile = "/home/dslfaith/public_html/faith/testFile.txt";
+    GLOBAL $source_folder_path;
+    $myFile = $source_folder_path . "testFile.txt";
 	$fh = fopen($myFile, 'a') or die("can't open file");
 	fwrite($fh, "makerequest result\n");
     fwrite($fh, "$result\n");

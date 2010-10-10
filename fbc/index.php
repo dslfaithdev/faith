@@ -149,8 +149,8 @@
 		    $post_params[] = 'faith_client_ip='.urlencode($_SERVER['REMOTE_ADDR']);
 		    $post_params[] = 'faith_source='.urlencode($faith_connect);
 		    $post_params[] = 'faith_url_id='.urlencode($faith_url_id);
-			$post_params[] = 'faith_u='.urlencode('http://169.237.6.102/~dslfaith/faith');
-			$post_params[] = 'faith_k='.urlencode('552820d26044c5326c72dc8c7fbfedfc');
+			$post_params[] = 'faith_u='.urlencode($source_server_url);
+			$post_params[] = 'faith_k='.urlencode($appapikey);
 			
 		    $postStr = implode('&', $post_params);
 			
@@ -182,7 +182,7 @@
 		$canvas_page = html_entity_decode($row['canvas_page']);
 		$canvas_callback = str_replace('http://cyrus.cs.ucdavis.edu/' ,'http://169.237.6.102/', $canvas_callback);
 		
-		$FaithFBURL = 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/';
+		$FaithFBURL = $source_server_url.'fbc/';
 		
 		$targetURL = $canvas_callback . urldecode ( $_GET['ffile']);
 		
@@ -346,6 +346,7 @@ function get_home_page_contents($user_id)
 
 function get_live_search_contents($user_id)
 {
+	GLOBAL $source_server_url;
 	$search_text = $_POST['search_txt'];
 	
 	return
@@ -358,7 +359,7 @@ function get_live_search_contents($user_id)
 	<tr>
 		<td></td>
 		<td colspan="2" style="text-align: center;">
-		<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/dsl_logo.jpg" /></td>
+		<img src="'.$source_server_url.'image/dsl_logo.jpg" /></td>
 		<td >
 		<td></td>
 	</tr>
@@ -376,13 +377,13 @@ function get_live_search_contents($user_id)
 		<div id="live_search_Div" style="background-color: #ffffff;text-align: center;">
 		<br /><br /><br />
 		<a style="padding-right:15px;padding-left:15px;" href="http://www.geni.net/" target="_blank">
-		<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/geni.png" style="border-style: none" />
+		<img src="'.$source_server_url.'image/geni.png" style="border-style: none" />
 		</a>
 		<a style="padding-right:15px;padding-left:15px;" href="http://www.ucdavis.edu/" target="_blank">
-		<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/uc-davis.jpg" style="border-style: none" />
+		<img src="'.$source_server_url.'image/uc-davis.jpg" style="border-style: none" />
 		</a>
 		<a style="padding-right:15px;padding-left:15px;" href="http://dsl.cs.ucdavis.edu/lab_website/index.php" target="_blank">
-		<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/dsl.jpg" style="border-style: none" />
+		<img src="'.$source_server_url.'image/dsl.jpg" style="border-style: none" />
 		</a>
 		</div>
 		</td></tr>
@@ -480,7 +481,7 @@ function do_faith_dsl_search_ajax(div,val,uid)
 
 <script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php"></script>
 <script type="text/javascript">
-    FB.init("552820d26044c5326c72dc8c7fbfedfc", "../xd_receiver.htm", { "reloadIfSessionStateChanged": true });
+    FB.init("<?=$appapikey?>", "../xd_receiver.htm", { "reloadIfSessionStateChanged": true });
 </script>
 </center>
 </body>

@@ -53,16 +53,16 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy.php">at RESTful API Level</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy.php">at RESTful API Level</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy_transform.php">Network Transformation</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform.php">Network Transformation</a>
 		(<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_add.php">Add</a></font>
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_add.php">Add</a></font>
 		 <font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_remove.php">Hide</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_remove.php">Hide</a></font>)
 		 (<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
 		</td>
 	</tr>
 	</table>
@@ -289,6 +289,8 @@ catch (Exception $e)
 									   		  $name,
 									   		  $select)
 	{
+		GLOBAL $facebook_canvas_page_url;
+		
 		$color = '#3b5998';
 		
 		if($select)
@@ -300,7 +302,7 @@ catch (Exception $e)
 		'<tr>
 		<td style="background-color: '.$color.';text-align: center;line-height: 30px;">
 		<a style="color: #ffffff;font-weight: bold;font-family: Verdana, Arial;font-size: 8pt;" 
-			href="http://apps.facebook.com/dsl_faith/set_policy.php?field=' . $id . '">' . $name . '</a>
+			href="'.$facebook_canvas_page_url.'set_policy.php?field=' . $id . '">' . $name . '</a>
 		</td>
 		</tr>';
 	}
@@ -343,7 +345,7 @@ catch (Exception $e)
 					  Details
 					  </a>)
 					</font>
-					<img style="display:none;" id="loading_img'.$div_counter.'" src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/ajax-loader.gif" />
+					<img style="display:none;" id="loading_img'.$div_counter.'" src="'.$source_server_url.'image/ajax-loader.gif" />
 				</td>
 			</tr>
 			<tr>

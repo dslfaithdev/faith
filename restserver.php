@@ -6,8 +6,8 @@ require_once 'func.php';
 
 try
 {
-	$myFile = "/home/dslfaith/public_html/faith/testFile.txt";
-	$fh = fopen($myFile, 'a') or die("can't open file");
+	$myFile = $source_folder_path."testFile.txt";
+	$fh = fopen($myFile, 'a');
 	$stringData = "restserver.php Called!\n";
 	fwrite($fh, $stringData);
 	

@@ -53,13 +53,13 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/register_app.php">Step 1 - Register</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>register_app.php">Step 1 - Register</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/client_library.php">Step 2 - Download Library</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>client_library.php">Step 2 - Download Library</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/supported_api.php">FAITH Supported APIs</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>supported_api.php">FAITH Supported APIs</a>
 		</td>
 	</tr>
 	</table>
@@ -83,7 +83,7 @@
 			<td width="90%" style="padding-bottom: 15px;font-size: 8pt;font-family: Verdana, Arial;line-height: 15px;text-align: left;border-bottom: #AAAAAA 1px solid;">
 			replace the <font color="#333333"> facebook.php and facebookapi_php5_restlib.php </font> of the official PHP Facebook library in your existing application with FAITH library.
 			<br /><br />
-			Find your application in <a href="http://apps.facebook.com/dsl_faith/select_app.php">Browse Applications</a>
+			Find your application in <a href="<?php echo $facebook_canvas_page_url; ?>select_app.php">Browse Applications</a>
 			</td>
 			<td width="5%"></td>
 		</tr>
@@ -100,10 +100,10 @@
 				<table cellpadding="0" cellspacing="0" width="100%" style="font-family: Verdana, Arial;font-size: 7pt;">
 				<tr>
 					<td>
-					<a href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/clientlibrary/iframe-10-10-05/iframe-10-10-05.rar">RAR file</a>
+					<a href="<?php echo $source_server_url; ?>clientlibrary/iframe-10-10-05/iframe-10-10-05.rar">RAR file</a>
 					</td>
 					<td>
-					<a href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/clientlibrary/iframe-10-10-05/iframe-10-10-05.zip">ZIP file</a>
+					<a href="<?php echo $source_server_url; ?>clientlibrary/iframe-10-10-05/iframe-10-10-05.zip">ZIP file</a>
 					</td>
 					<td width="300px">
 					<font style="font-weight: bold;color: red;">For IFRAME apps</font>
@@ -124,10 +124,10 @@
 				<table cellpadding="0" cellspacing="0" width="100%" style="font-family: Verdana, Arial;font-size: 7pt;">
 				<tr>
 					<td>
-					<a href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/clientlibrary/fbml-10-10-05/fbml-10-10-05.rar">RAR file</a>
+					<a href="<?php echo $source_server_url; ?>clientlibrary/fbml-10-10-05/fbml-10-10-05.rar">RAR file</a>
 					</td>
 					<td>
-					<a href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/clientlibrary/fbml-10-10-05/fbml-10-10-05.zip">ZIP file</a>
+					<a href="<?php echo $source_server_url; ?>clientlibrary/fbml-10-10-05/fbml-10-10-05.zip">ZIP file</a>
 					</td>
 					<td width="300px">
 					<font style="font-weight: bold;color: red;">For FBML and FACEBOOK CONNECT apps</font>

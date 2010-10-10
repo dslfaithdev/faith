@@ -53,13 +53,13 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history_url.php">URL Log by Time</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history_url.php">URL Log by Time</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history.php">API Log by Time</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history.php">API Log by Time</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history_api.php">API Log by RESTful API</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history_api.php">API Log by RESTful API</a>
 		</td>
 	</tr>
 	</table>
@@ -188,6 +188,9 @@ catch (Exception $e)
 								     $user_ip_addr,
 								     $div_counter)
 	{
+		GLOBAL $source_server_url;
+		GLOBAL $facebook_canvas_page_url;
+		
 		$app_server_html ='';
 		$client_server_html = '';
 		
@@ -213,11 +216,11 @@ catch (Exception $e)
 		<tr>
 			<td width="5%"></td>
 			<td width="40%">
-			<a href="http://apps.facebook.com/dsl_faith/set_policy.php?field=' . $restapi_field_id . '">' . $name . '</a>
+			<a href="'.$facebook_canvas_page_url.'set_policy.php?field=' . $restapi_field_id . '">' . $name . '</a>
 			</td>
 			<td width="10%">called by:</td>
 			<td width="40%">
-			<a href="http://apps.facebook.com/dsl_faith/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'">' . $app_name . '</a>
+			<a href="'.$facebook_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'">' . $app_name . '</a>
 			</td>
 			<td width="5%"></td>
 		</tr>
@@ -237,7 +240,7 @@ catch (Exception $e)
 			</td>
 			</td>
 			<td width="5%" style="text-align: center;vertical-align:top;">
-			<img style="display:none;" id="loading_img'.$div_counter.'" src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/ajax-loader.gif" />
+			<img style="display:none;" id="loading_img'.$div_counter.'" src="'.$source_server_url.'image/ajax-loader.gif" />
 			</td>
 		</tr>
 		<tr>

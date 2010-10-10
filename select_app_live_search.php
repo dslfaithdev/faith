@@ -11,15 +11,15 @@ $option = $_POST['option'];
 $app_select = $_POST['app_select'];
 $iframe_target = '';
 
-$root_url = 'http://apps.facebook.com/dsl_faith/';
+$root_url = $facebook_canvas_page_url;
 
 if($option == $faith_connect)
 {
-	$root_url = 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/';
+	$root_url = $source_server_url.'fbc/';
 }
 else if($option == $faith_iframe)
 {
-	$root_url = 'http://apps.facebook.com/dsl_faith_iframe/';
+	$root_url = $facebook_iframe_canvas_page_url;
 	$iframe_target = 'target="_parent"';
 }
 
@@ -107,7 +107,7 @@ if (strlen($live_search_str) > 0)
 	  	
 	  	$view_history = 
 	  	'<a '.$iframe_target.' style="font-size: 8pt;font-family: Verdana, Arial;padding-left: 5px;padding-right: 5px;border-right: #AAAAAA 1px solid;text-decoration: underline;" 
-	  		href="http://apps.facebook.com/dsl_faith/view_history_app.php?app_id='.$app_id.'">view log</a>';
+	  		href="'.$facebook_canvas_page_url.'view_history_app.php?app_id='.$app_id.'">view log</a>';
 	  	
        	$hint .= 
        	'

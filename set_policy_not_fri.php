@@ -53,16 +53,16 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy.php">at RESTful API Level</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy.php">at RESTful API Level</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/set_policy_transform.php">Network Transformation</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform.php">Network Transformation</a>
 		(<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_add.php">Add</a></font>
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_add.php">Add</a></font>
 		 <font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_remove.php">Remove</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_remove.php">Remove</a></font>)
 		 (<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="http://apps.facebook.com/dsl_faith/set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
+		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
 		</td>
 	</tr>
 	</table>

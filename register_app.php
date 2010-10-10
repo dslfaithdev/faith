@@ -53,13 +53,13 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/register_app.php">Step 1 - Register</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>register_app.php">Step 1 - Register</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/client_library.php">Step 2 - Download Library</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>client_library.php">Step 2 - Download Library</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/supported_api.php">FAITH Supported APIs</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>supported_api.php">FAITH Supported APIs</a>
 		</td>
 	</tr>
 	</table>

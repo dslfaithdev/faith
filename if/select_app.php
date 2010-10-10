@@ -77,13 +77,13 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a target="_parent" href="http://apps.facebook.com/dsl_faith_iframe/select_app.php">Live Search</a>
+		<a target="_parent" href="<?php echo $facebook_iframe_canvas_page_url; ?>select_app.php">Live Search</a>
 		</td>
 		<td class="PageTitleLink">
-		<a target="_parent" href="http://apps.facebook.com/dsl_faith_iframe/select_app.php?search=1">Bookmarked</a>
+		<a target="_parent" href="<?php echo $facebook_iframe_canvas_page_url; ?>select_app.php?search=1">Bookmarked</a>
 		</td>
 		<td class="PageTitleLink">
-		<a target="_parent" href="http://apps.facebook.com/dsl_faith_iframe/select_app.php?search=2">Blocked</a>
+		<a target="_parent" href="<?php echo $facebook_iframe_canvas_page_url; ?>select_app.php?search=2">Blocked</a>
 		</td>
 	</tr>
 	</table>
@@ -98,7 +98,7 @@
 		<tr>
 			<td width="10%"></td>
 			<td width="60%" style="padding-top: 30px;text-align: right;">
-			<img src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/dsl_logo.jpg" /></td>
+			<img src="<?php echo $source_server_url; ?>image/dsl_logo.jpg" /></td>
 			<td width="20%" style="padding-top: 30px;font-weight: bolder;font-size: 10pt;font-family: Verdana, Arial;line-height: 35px;text-align: center;vertical-align:bottom;">
 			Live Search</td>
 			<td width="10%"></td>
@@ -594,6 +594,9 @@
 		  							   	$total_bookmark_app,
 		  							   	$is_canvas)
 	{
+		GLOBAL $source_server_url;
+		GLOBAL $facebook_iframe_canvas_page_url;
+		
 		$canvas_str = '<font style="padding-left: 10px;padding-right: 10px;color: #aa3333;border-right: #AAAAAA 1px solid;">FBML App</font>';
 	  	if($is_canvas == '2')
 	  	{
@@ -609,24 +612,24 @@
 		
 		$block_me_str = 
 	  	'<a style="padding-left: 10px;padding-right: 10px;border-right: #AAAAAA 1px solid;text-decoration: underline;" 
-	  		href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/select_app.php?app_id='.$app_id.'">block</a>';
+	  		href="'.$source_server_url.'fbc/select_app.php?app_id='.$app_id.'">block</a>';
 		
 		$bookmark_me_str = 
 	  	'<a style="padding-left: 10px;padding-right: 10px;border-right: #AAAAAA 1px solid;text-decoration: underline;" 
-	  		href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/select_app.php?bkapp_id='.$app_id.'">bookmark</a>';
+	  		href="'.$source_server_url.'fbc/select_app.php?bkapp_id='.$app_id.'">bookmark</a>';
 	  	
 	  	if($block_app > 0)
 	  	{
 	  		$block_me_str = 
 	  		'<a style="padding-left: 10px;padding-right: 10px;border-right: #AAAAAA 1px solid;color: red;text-decoration: underline;" 
-	  			href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/select_app.php?unapp_id='.$app_id.'">blocked</a>';
+	  			href="'.$source_server_url.'fbc/select_app.php?unapp_id='.$app_id.'">blocked</a>';
 	  	}
 	  	
 		if($bookmark_app > 0)
 	  	{
 	  		$bookmark_me_str = 
 	  		'<a style="padding-left: 10px;padding-right: 10px;border-right: #AAAAAA 1px solid;color: #333333;text-decoration: underline;font-weight: bold;" 
-	  			href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/select_app.php?unbkapp_id='.$app_id.'">bookmarked</a>';
+	  			href="'.$source_server_url.'fbc/select_app.php?unbkapp_id='.$app_id.'">bookmarked</a>';
 	  	}
 	  	
 	  	$view_history = 
@@ -641,7 +644,7 @@
        	<tr>
     		<td width="100%" style="padding-top:10px;">
        		<a style="text-decoration: underline; font-size: 9pt; line-height: 20px;font-weight: bold;font-family: Verdana, Arial;" target="_parent"
-       			href="http://apps.facebook.com/dsl_faith_iframe/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
+       			href="'.$facebook_iframe_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
        		</td>
        	</tr>
        	<tr>

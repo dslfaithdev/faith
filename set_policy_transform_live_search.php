@@ -74,7 +74,7 @@ if($option == '2')
 		$removal_application_list .= ' 
 		<font style="padding-left: 10px;padding-right: 10px;">
 		<a style="text-decoration: underline; font-size: 8pt; line-height: 20px;font-family: Verdana, Arial;"
-       		href="http://apps.facebook.com/dsl_faith/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
+       		href="'.$facebook_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
 		</font>';
 		$app_number_added++;
 	}
@@ -103,15 +103,15 @@ else if($option == '22')
 	$remove_id = $_POST['remove_id'];
 	$iframe_target = '';
 	
-	$root_url = 'http://apps.facebook.com/dsl_faith/';
+	$root_url = $facebook_canvas_page_url;
 	
 	if($option == $faith_connect)
 	{
-		$root_url = 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/';
+		$root_url = $source_server_url.'fbc/';
 	}
 	else if($option == $faith_iframe)
 	{
-		$root_url = 'http://apps.facebook.com/dsl_faith_iframe/';
+		$root_url = $facebook_iframe_canvas_page_url;
 		$iframe_target = 'target="_parent"';
 	}
 	
@@ -160,7 +160,11 @@ else if($option == '22')
 		  	$is_canvas = $row['is_canvas'];
 		  	
 		  	$canvas_str = 'FBML App';
-		  	if($is_canvas == '0')
+			if($is_canvas == '3')
+		  	{
+		  		$canvas_str = 'FB Connect App';
+		  	}
+		  	else if($is_canvas == '2')
 		  	{
 		  		$canvas_str = 'IFrame App';
 		  	}
@@ -269,7 +273,7 @@ if($option == '4')
 		$removal_application_list .= ' 
 		<font style="padding-left: 10px;padding-right: 10px;">
 		<a style="text-decoration: underline; font-size: 8pt; line-height: 20px;font-family: Verdana, Arial;"
-       		href="http://apps.facebook.com/dsl_faith/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
+       		href="'.$facebook_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
 		</font>';
 		$app_number_added++;
 	}
@@ -298,15 +302,15 @@ else if($option == '44')
 	$add_id = $_POST['add_id'];
 	$iframe_target = '';
 	
-	$root_url = 'http://apps.facebook.com/dsl_faith/';
+	$root_url = $facebook_canvas_page_url;
 	
 	if($option == $faith_connect)
 	{
-		$root_url = 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/';
+		$root_url = $source_server_url.'fbc/';
 	}
 	else if($option == $faith_iframe)
 	{
-		$root_url = 'http://apps.facebook.com/dsl_faith_iframe/';
+		$root_url = $facebook_iframe_canvas_page_url;
 		$iframe_target = 'target="_parent"';
 	}
 	
@@ -355,7 +359,11 @@ else if($option == '44')
 		  	$is_canvas = $row['is_canvas'];
 		  	
 		  	$canvas_str = 'FBML App';
-		  	if($is_canvas == '0')
+			if($is_canvas == '3')
+		  	{
+		  		$canvas_str = 'FB Connect App';
+		  	}
+		  	else if($is_canvas == '2')
 		  	{
 		  		$canvas_str = 'IFrame App';
 		  	}
@@ -468,7 +476,7 @@ if($option == '6')
 		$removal_application_list .= ' 
 		<font style="padding-left: 10px;padding-right: 10px;">
 		<a style="text-decoration: underline; font-size: 8pt; line-height: 20px;font-family: Verdana, Arial;"
-       		href="http://apps.facebook.com/dsl_faith/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
+       		href="'.$facebook_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'"">'.$app_name.'</a>
 		</font>';
 		$app_number_added++;
 	}
@@ -497,15 +505,15 @@ else if($option == '66')
 	$api_id = $_POST['api_id'];
 	$iframe_target = '';
 	
-	$root_url = 'http://apps.facebook.com/dsl_faith/';
+	$root_url = $facebook_canvas_page_url;
 	
 	if($option == $faith_connect)
 	{
-		$root_url = 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/';
+		$root_url = $source_server_url.'fbc/';
 	}
 	else if($option == $faith_iframe)
 	{
-		$root_url = 'http://apps.facebook.com/dsl_faith_iframe/';
+		$root_url = $facebook_iframe_canvas_page_url;
 		$iframe_target = 'target="_parent"';
 	}
 	
@@ -554,7 +562,11 @@ else if($option == '66')
 		  	$is_canvas = $row['is_canvas'];
 		  	
 		  	$canvas_str = 'FBML App';
-		  	if($is_canvas == '0')
+			if($is_canvas == '3')
+		  	{
+		  		$canvas_str = 'FB Connect App';
+		  	}
+		  	else if($is_canvas == '2')
 		  	{
 		  		$canvas_str = 'IFrame App';
 		  	}

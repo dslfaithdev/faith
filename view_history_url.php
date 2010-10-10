@@ -53,13 +53,13 @@
 	<table>
 	<tr>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history_url.php">URL Log by Time</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history_url.php">URL Log by Time</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history.php">API Log by Time</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history.php">API Log by Time</a>
 		</td>
 		<td class="PageTitleLink">
-		<a href="http://apps.facebook.com/dsl_faith/view_history_api.php">API Log by RESTful API</a>
+		<a href="<?php echo $facebook_canvas_page_url; ?>view_history_api.php">API Log by RESTful API</a>
 		</td>
 	</tr>
 	</table>
@@ -164,6 +164,10 @@ catch (Exception $e)
 								  $url_logID,
 								  $div_counter)
 	{
+		GLOBAL $source_server_url;
+		GLOBAL $facebook_canvas_page_url;
+		GLOBAL $facebook_iframe_canvas_page_url;
+		
 		$app_server_html ='';
 		$client_server_html = '';
 		
@@ -183,15 +187,15 @@ catch (Exception $e)
 			<a href="#" onclick="do_ajax_ip('."'ip_infor_Div".$div_counter."'".',2,'."'$user_ip_addr'".','."'loading_img".$div_counter."'".');">' . $user_ip_addr . '</a>';
 		}
 		
-		$root_url = '<a href="http://apps.facebook.com/dsl_faith/">FAITH FBML</a>';
+		$root_url = '<a href="'.$facebook_canvas_page_url.'">FAITH FBML</a>';
 
 		if($faith_type == '2')
 		{
-			$root_url = '<a href="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/fbc/">FAITH Facebook Connect</a>'; 
+			$root_url = '<a href="'.$source_server_url.'fbc/">FAITH Facebook Connect</a>'; 
 		}
 		else if($faith_type == '3')
 		{
-			$root_url = $root_url = '<a target="_top" href="http://apps.facebook.com/dsl_faith_iframe/">FAITH IFrame</a>';
+			$root_url = $root_url = '<a target="_top" href="'.$facebook_iframe_canvas_page_url.'">FAITH IFrame</a>';
 		}
 		
 		$api_detail_message = '<a href="#" onclick="do_ajax_ip('."'ip_infor_Div".$div_counter."'".',5,'."'$url_logID'".','."'loading_img".$div_counter."'".');">API details</a>';
@@ -212,7 +216,7 @@ catch (Exception $e)
 			<td width="5%"></td>
 			<td width="90%">
 			<font style="padding-left: 10px; padding-right: 10px; border-right: #AAAAAA 1px solid;">
-			<a href="http://apps.facebook.com/dsl_faith/index.php?ffile=' . $default_page . '&fpro=' . $app_id .'">' . $app_name . '</a>
+			<a href="'.$facebook_canvas_page_url.'index.php?ffile=' . $default_page . '&fpro=' . $app_id .'">' . $app_name . '</a>
 			via
 			'.$root_url.'
 			</font>
@@ -235,7 +239,7 @@ catch (Exception $e)
 			' </font>
 			</td>
 			<td width="5%" style="text-align: center;vertical-align:top;">
-			<img style="display:none;" id="loading_img'.$div_counter.'" src="http://cyrus.cs.ucdavis.edu/~dslfaith/faith/image/ajax-loader.gif" />
+			<img style="display:none;" id="loading_img'.$div_counter.'" src="'.$source_server_url.'image/ajax-loader.gif" />
 			</td>
 		</tr>
 		<tr>
