@@ -49,26 +49,6 @@
 	<td height="10px"></td>
 </tr>
 <tr>
-	<td>
-	<table>
-	<tr>
-		<td class="PageTitleLink">
-		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy.php">at RESTful API Level</a>
-		</td>
-		<td class="PageTitleLink">
-		<a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform.php">Network Transformation</a>
-		(<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_add.php">Add</a></font>
-		 <font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_remove.php">Hide</a></font>)
-		 (<font style="padding-left: 5px; padding-right: 5px;">
-		 <a href="<?php echo $facebook_canvas_page_url; ?>set_policy_transform_accepted_request.php">Confirmed Requests</a></font>)
-		</td>
-	</tr>
-	</table>
-	</td>
-</tr>
-<tr>
 	<td style="height: 650px;vertical-align:top;border-right: #3b5998 3px solid;border-top: #3b5998 3px solid;border-left: #3b5998 3px solid;border-bottom: #3b5998 3px solid;">
 	<table cellpadding="0" cellspacing="0" width="100%">
 	<tr>
@@ -76,28 +56,33 @@
 		<table cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td width="5%"></td>
-			<td width="90%" style="padding-top: 20px;font-weight: bolder;font-size: 10pt;font-family: Verdana, Arial;line-height: 45px;text-align: left;">
-			Social Network Transformation - Remove Virtual Friendship Connections by Files
+			<td colspan="2" width="90%" style="padding-top: 20px;padding-bottom: 5px;font-weight: bolder;font-size: 10pt;font-family: Verdana, Arial;line-height: 45px;text-align: left;border-bottom: #AAAAAA 1px solid;">
+			FAITH Services</td><td colspan="2">
 			</td>
 			<td width="5%"></td>
 		</tr>
 		<tr>
 			<td width="5%"></td>
-			<td width="90%" style="padding-bottom: 15px;font-size: 8pt;font-family: Verdana, Arial;line-height: 15px;text-align: left;border-bottom: #AAAAAA 1px solid;">
-			UNDER CONSTRUCTION
-			</td>
-			<td width="5%"></td>
-		</tr>
-		<tr>
-			<td width="5%"></td>
-			<td width="90%">
-			<table width="100%">
+			<td width="45%" valign="top">
+			<table cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td>
-				
+				<td width="8%" height="45px">
+				<img src="<?php echo $source_server_url; ?>image/privacy_shield.jpg" />
+				</td>
+				<td width="92%" class="TransformTitleLink">
+				<a href="<?php echo $facebook_canvas_page_url; ?>service_privacy_shield.php?setting=1">Privacy Shield</a>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="TransformTitleDescription">
+				Recommend you the best privacy settings for your wall posts.
 				</td>
 			</tr>
 			</table>
+			</td>
+			<td width="45%" valign="top">
+			
 			</td>
 			<td width="5%"></td>
 		</tr>

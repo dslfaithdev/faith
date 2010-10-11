@@ -77,7 +77,7 @@
 		<tr>
 			<td width="5%"></td>
 			<td colspan="2" width="90%" style="padding-top: 20px;padding-bottom: 5px;font-weight: bolder;font-size: 10pt;font-family: Verdana, Arial;line-height: 45px;text-align: left;border-bottom: #AAAAAA 1px solid;">
-			Social Network Transformation</td><td colspan="2">
+			Social Network Transformation
 			</td>
 			<td width="5%"></td>
 		</tr>

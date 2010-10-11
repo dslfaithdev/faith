@@ -88,13 +88,13 @@
 <tr>
 	<td height="10px"></td>
 </tr>
-<tr>
-	<td>
 	<?php
 	try
 	{	
 		if(isset($_GET['ffile']) && isset($_GET['fpro']))
 		{
+			echo '<tr><td>';
+			
 			$facebook = new Facebook($appapikey, $appsecret);
 			$user_id = $facebook->get_loggedin_user();
 		
@@ -334,8 +334,30 @@
 	
 function get_home_page_contents($user_id)
 {
+	GLOBAL $source_server_url;
+	
 	echo 
-	'<table style="height: 650px;border-right: #3b5998 3px solid;border-top: #3b5998 3px solid;border-left: #3b5998 3px solid;border-bottom: #3b5998 3px solid;" width="100%">
+	'
+	<tr>
+		<td>
+		<table>
+		<tr>
+			<td class="PageTitleLink">
+			<a href="'.$source_server_url.'fbc/select_app.php">Live Search</a>
+			</td>
+			<td class="PageTitleLink">
+			<a href="'.$source_server_url.'fbc/select_app.php?search=1">Bookmarked</a>
+			</td>
+			<td class="PageTitleLink">
+			<a href="'.$source_server_url.'fbc/select_app.php?search=2">Blocked</a>
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+	<table style="height: 650px;border-right: #3b5998 3px solid;border-top: #3b5998 3px solid;border-left: #3b5998 3px solid;border-bottom: #3b5998 3px solid;" width="100%">
 	 	'.get_live_search_contents($user_id).'
 	 </table>';
 }

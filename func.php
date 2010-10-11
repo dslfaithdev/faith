@@ -73,7 +73,7 @@ function display_header_links($div_counter, $user_id)
     	<table cellspacing="0" cellpadding="0">
     	<tr>
   			<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
-    		<a href="'.$facebook_canvas_page_url.'select_app.php">Search Apps</a>
+    		<a href="'.$facebook_canvas_page_url.'services.php">Services</a>
     		</td>
     		<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
     		<a href="'.$facebook_canvas_page_url.'set_policy.php">Access Rules</a>
@@ -184,7 +184,7 @@ function display_header_links_fbc($div_counter, $user_id)
     	<table cellspacing="0" cellpadding="0">
     	<tr>
   			<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
-    		<a href="'.$source_server_url.'fbc/select_app.php">Search Apps</a>
+    		<a target="_parent" href="'.$facebook_canvas_page_url.'services.php">Services</a>
     		</td>
     		<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
     		<a target="_parent" href="'.$facebook_canvas_page_url.'set_policy.php">Access Rules</a>
@@ -254,7 +254,7 @@ function display_header_links_if($div_counter, $user_id)
     	<table cellspacing="0" cellpadding="0">
     	<tr>
   			<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
-    		<a target="_parent" href="'.$facebook_iframe_canvas_page_url.'select_app.php">Search Apps</a>
+    		<a target="_parent" href="'.$facebook_canvas_page_url.'services.php">Services</a>
     		</td>
     		<td style="font-family: Verdana, Arial;font-size: 8pt;line-height: 13px;text-align: center;border-right: #AAAAAA 1px solid;" width="149px">
     		<a target="_parent" href="'.$facebook_canvas_page_url.'set_policy.php">Access Rules</a>

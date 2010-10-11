@@ -84,8 +84,6 @@
 <tr>
 	<td height="10px"></td>
 </tr>
-<tr>
-	<td>
 	<?php
 	
 	require_once '../vars.php';
@@ -93,6 +91,8 @@
 	
 	try
 	{	
+		echo '<tr><td>';
+		
 		$facebook = new Facebook(array('appId'  => $iframe_appid,
 								   'secret' => $iframe_appsecret,
 								   'cookie' => true,));
@@ -360,8 +360,30 @@
 	
 function get_home_page_contents($user_id)
 {
+	GLOBAL $facebook_iframe_canvas_page_url;;
+	
 	echo 
-	'<table style="height: 650px;border-right: #3b5998 3px solid;border-top: #3b5998 3px solid;border-left: #3b5998 3px solid;border-bottom: #3b5998 3px solid;" width="100%">
+	'
+	<tr>
+		<td>
+		<table>
+		<tr>
+			<td class="PageTitleLink">
+			<a target="_parent" href="'.$facebook_iframe_canvas_page_url.'select_app.php">Live Search</a>
+			</td>
+			<td class="PageTitleLink">
+			<a target="_parent" href="'.$facebook_iframe_canvas_page_url.'select_app.php?search=1">Bookmarked</a>
+			</td>
+			<td class="PageTitleLink">
+			<a target="_parent" href="'.$facebook_iframe_canvas_page_url.'select_app.php?search=2">Blocked</a>
+			</td>
+		</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+	<table style="height: 650px;border-right: #3b5998 3px solid;border-top: #3b5998 3px solid;border-left: #3b5998 3px solid;border-bottom: #3b5998 3px solid;" width="100%">
 	 	'.get_live_search_contents($user_id).'
 	 </table>';
 }

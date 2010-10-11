@@ -77,7 +77,7 @@
 		<tr>
 			<td width="5%"></td>
 			<td width="90%" style="padding-top: 20px;font-weight: bolder;font-size: 10pt;font-family: Verdana, Arial;line-height: 45px;text-align: left;">
-			Social Network Transformation - Hide Friendship Connections</td><td colspan="2">
+			Social Network Transformation - Hide Friendship Connections
 			</td>
 			<td width="5%"></td>
 		</tr>
