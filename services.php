@@ -76,7 +76,7 @@
 			<tr>
 				<td></td>
 				<td class="TransformTitleDescription">
-				Recommend you the best privacy settings for your wall posts.
+				Recommend you a better privacy setting for your wall posts.
 				</td>
 			</tr>
 			</table>

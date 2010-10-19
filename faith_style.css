@@ -114,6 +114,26 @@
   padding-right: 10px;
   border-right: #AAAAAA 1px solid;
 }
+.PrivacyShieldBackGround
+{
+  background-image:url('http://cyrus.cs.ucdavis.edu/~leeru/faith/image/shield_back.jpg');
+  background-repeat:no-repeat;
+}
+.PrivacyShieldButtonStyle
+{
+  color: #ffffff;
+  font-family: Verdana, Arial;
+  background-color: #3b5998; 
+  border: 1px solid; 
+  border-color: #333333; 
+  text-decoration: none;
+  font-weight: bold;	
+  font-size: 9pt;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .SettingTable
 {
   position:absolute;
@@ -124,7 +144,7 @@
   border-left:#3b5998 3px solid;
   background-color:#ffffff;
   width:150px;
-  height:250px;
+  height:350px;
 }
 .SettingTableClear
 {

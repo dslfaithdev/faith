@@ -89,7 +89,7 @@ function display_header_links($div_counter, $user_id)
 			Settings
 			</a>
     		</td>
-    		<td width="20px"><img style="display:none;" id="setting_loading_img" src="http://node0.DSL-FAITH.DSL.emulab.net/faith/image/setting-ajax-loader.gif" /></td>
+    		<td width="20px"><img style="display:none;" id="setting_loading_img" src="'.$source_server_url.'image/setting-ajax-loader.gif" /></td>
     	</tr>
     	</table>
     	</td>
