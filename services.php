@@ -70,7 +70,7 @@
 				<img src="<?php echo $source_server_url; ?>image/privacy_shield.jpg" />
 				</td>
 				<td width="92%" class="TransformTitleLink">
-				<a href="<?php echo $facebook_canvas_page_url; ?>service_privacy_shield.php?setting=1">Privacy Shield</a>
+				<a href="<?php echo $facebook_iframe_canvas_page_url; ?>service_privacy_shield.php?setting=1">Privacy Shield (IFrame App)</a>
 				</td>
 			</tr>
 			<tr>

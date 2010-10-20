@@ -90,7 +90,7 @@ if($option == '1')
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />
 		  <li style="color: #AA3333;padding-left: 10px;">
-		  	<a style="text-decoration:underline;" href="'.$facebook_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
+		  	<a style="text-decoration:underline;" href="'.$facebook_iframe_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
 		  </li>
 		  <hr>
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',3,0".');" name="privacy_setting_select_input" id="Enable_Default" '.$privacy_default_checked.' '.$privacy_disable.' value="0">Default</input><br />
@@ -222,7 +222,7 @@ else if($option == '2')
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />
 		  <li style="color: #AA3333;padding-left: 10px;">
-		  	<a style="text-decoration:underline;" href="'.$facebook_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
+		  	<a style="text-decoration:underline;" href="'.$facebook_iframe_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
 		  </li>
 		  <hr>
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',3,0".');" name="privacy_setting_select_input" id="Enable_Default" '.$privacy_default_checked.' '.$privacy_disable.' value="0">Default</input><br />
@@ -318,7 +318,7 @@ else if($option == '3')
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />
 		  <li style="color: #AA3333;padding-left: 10px;">
-		  	<a style="text-decoration:underline;" href="'.$facebook_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
+		  	<a style="text-decoration:underline;" href="'.$facebook_iframe_canvas_page_url.'service_privacy_shield.php?setting=1">Wall Post Privacy Setting</a>
 		  </li>
 		  <hr>
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',3,0".');" name="privacy_setting_select_input" id="Enable_Default" '.$privacy_default_checked.' '.$privacy_disable.' value="0">Default</input><br />
