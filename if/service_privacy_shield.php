@@ -24,6 +24,16 @@
 	$user_id = $facebook->getUser();
 	$session = $facebook->getSession();
 	
+	$has_permission = file_get_contents(
+	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=offline_access&access_token='.$session['access_token'].'&format=json'); 
+	
+	if(!$has_permission ||
+		strripos($has_permission, 'error_code'))
+	{
+		$facebook->request($facebook_iframe_canvas_page_url,
+					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access');
+	}
+	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
 								   transform_add.add_uid_a,
 								   transform_add.add_time,
@@ -551,6 +561,11 @@ catch (Exception $e)
 		GLOBAL $user_id;
 		GLOBAL $db;
 
+		if($user_id == NULL)
+		{
+			return;
+		}
+		
 		$privacy_setting_results = mysql_query("SELECT enable FROM privacy_settings 
     																 WHERE uid = $user_id;", $db);
 		
