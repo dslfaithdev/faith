@@ -15,23 +15,14 @@
 	require_once '../vars.php';
 	require_once '../if/src/facebook.php';
 	try
-	{
-	
-	/*foreach ($_POST as $key => $value) {
-	    echo "(eventdetails.php)POST Key: $key; Value: $value<br />";
-	}
-	
-	foreach ($_GET as $key => $value) {
-	     echo "(eventdetails.php)GET Key: $key; Value: $value<br />";
-	}*/
-		
-		
+	{	
 	mysqlSetup($db);
 	$facebook = new Facebook(array('appId'  => $iframe_appid,
 								   'secret' => $iframe_appsecret,
 								   'cookie' => true,));
 	
 	$user_id = $facebook->getUser();
+	$session = $facebook->getSession();
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
 								   transform_add.add_uid_a,
@@ -88,21 +79,86 @@
 	<tr>
 		<td colspan="3" height="20px"></td>
 	</tr>
+	<?php 
+		if($_POST['enable_setting_hidden_input'] == 'from_setting')
+		{
+			$enable_value_update = '0';
+			
+			if(isset($_POST['enable_setting_input']) && strtolower($_POST['enable_setting_input']) == 'on')
+			{
+				$enable_value_update = $_POST['enable_setting_hidden_input_value'];
+			}
+			
+			$query = sprintf("UPDATE privacy_settings SET enable = '%s'
+													   WHERE uid = '%s'",
+													   mysql_real_escape_string($enable_value_update),
+													   $user_id);
+									
+			if(!mysql_query($query))
+		    {
+		    	echo '<div class="fberrorbox" style="width: 500px;">  
+		    			  Failed to update the privacy setting!
+						  </div><br />';
+		    }
+			else
+		    {
+		    	echo '<div class="fbbluebox">  
+	    			Privacy setting has been changed successfully!  
+					</div><br />';
+		    }
+		}
+				
+	?>
 	<tr>
 		<td width="5%"></td>
 		<td width="90%">
+		<form style="white-space:nowrap;" action="<?php echo $source_server_url ?>if/service_privacy_shield.php?setting=<?php echo $_GET['setting'] ?>&signed_request=<?php echo $_GET['signed_request'] ?>" method="post">
 		<table width="100%" style="background-image:url('<?php echo $source_server_url; ?>image/faith_background.gif');background-repeat:repeat-x;border:1px solid #d4d4d4;">
 		<tr>
-			<td>
+			<td width="35%">
 			<font style="padding-left:20px;font-weight: bolder;font-size: 11pt;font-family: Verdana, Arial;line-height: 40px;text-align: left;color: #3b5998;">
 			Privacy Shield
 			</font>
-			<br />
+			</td>
+			<td width="65%">
+			<font style="font-weight: bolder;padding-left:20px;font-size: 8pt;font-family: Verdana, Arial;line-height: 30px;text-align: left;color: #AA3333;">
+			<input type="hidden" name="enable_setting_hidden_input" value="from_setting"/>
+			<input type="hidden" name="enable_setting_hidden_input_value" value="<?php echo $_GET['setting'] ?>"/>
+			<?php 
+				GLOBAL $user_id;
+				GLOBAL $db;
+		
+				$results = mysql_query("SELECT enable
+											   from privacy_settings
+											   where uid = $user_id", $db);
+				
+				$privacy_disable = 'disabled="disabled"';
+				$enable_setting_checkbox = '';
+				while($row = mysql_fetch_array($results))
+				{
+					$privacy_disable = '';
+					$enable = $row['enable'];
+					
+					if($enable == $_GET['setting'])
+					{
+						$enable_setting_checkbox = 'CHECKED';
+					}
+				}
+			?>
+			<input onclick="this.form.submit()" type="CHECKBOX" name="enable_setting_input" id="enable_setting_input" <?php GLOBAL $privacy_disable; echo $privacy_disable; ?> 
+				<?php GLOBAL $enable_setting_checkbox; echo $enable_setting_checkbox; ?>>USE THIS SETTING FOR ALL YOUR WALL POSTS IN FAITH</input>
+			</font>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
 			<font style="padding-left:20px;font-size: 8pt;font-family: Verdana, Arial;line-height: 30px;text-align: left;color: #333333;">
 			Recommend you a better privacy setting for your wall posts.
 			</font>
+			</td>
 		</tr>
 		</table>
+		</form>
 		</td>
 		<td width="5%"></td>
 	</tr>
@@ -214,43 +270,150 @@ try
 				</div><br />';
 			}
 		}
+		else if($_POST['textarea_submit'] == 'Share')
+		{
+			if(strlen($_POST['privacy_textarea']) > '0')
+			{
+				$message = $_POST['privacy_textarea'];
+				
+				$sql_privacy_field = 'quality_tie';
+				if($_GET['setting'] == '2')
+				{
+					$sql_privacy_field = 'category_friendlist';
+				}
+				else if($_GET['setting'] == '3')
+				{
+					$sql_privacy_field = 'keyword_interests';
+				}
+				
+				$privacy_results = mysql_query("SELECT $sql_privacy_field FROM privacy_settings 
+		    															  WHERE uid = $user_id;", $db);
+		    	
+				while($privacy_row = mysql_fetch_array($privacy_results))
+				{
+					$privacy_list = $privacy_row[$sql_privacy_field];
+				}
+				
+				if(strlen($privacy_list) >= 2)
+				{
+					$privacy_string = '{"value":"CUSTOM","friends":"SOME_FRIENDS","allow":"'.$privacy_list.'",}';
+					
+					$results = $facebook->api(array('method'=>'stream.publish',
+	    											'message'=>$message,
+													'privacy'=>$privacy_string,));
+	    
+				    echo '<div class="fbbluebox">  
+	    			Your message has been posted sucessfully!  
+					</div><br />';
+				}
+			}
+			else
+			{
+				echo '<div class="fberrorbox">
+					  Message cannot be empty!
+					  </div><br />';
+			}
+		}
 		else if($_POST['get_suggestions_submit'] == 'Get Privacy Suggestions')
 		{
+			$post_params = array();
+			$attributes = '';
+			
 			if($_GET['setting'] == '1')
 			{
-				init_settings('["765554109", "3200156", "3219599", "695694021", "759410694", "581205756", "621651366"]', '');
+				$post_params[] = 'priv_level='.urlencode('r_quality');
+				
+				$privacy_recommendation = '["765554109", "3200156", "3219599", "695694021", "759410694", "581205756", "621651366"]';
 			}
 			else if($_GET['setting'] == '2')
 			{
-				init_settings('["765554109","710706363","3200156","3219599","695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]', 'davis;test<s>work</s>');
+				$post_params[] = 'priv_level='.urlencode('group');
+				$attributes = $_POST['privacy_txt'];
+				
+				if($_POST['Family_input'] == 'on')
+				{
+					$post_params[] = 'group_name='.urlencode('family');
+					$attributes .= '<s>family</s>';
+				}
+				
+				if($_POST['Work_input'] == 'on')
+				{
+					$post_params[] = 'group_name='.urlencode('work');
+					$attributes .= '<s>work</s>';
+				}
+				
+				if($_POST['Schoolt_input'] == 'on')
+				{
+					$post_params[] = 'group_name='.urlencode('school');
+					$attributes .= '<s>school</s>';
+				}
+				
+				$post_params[] = 'ui_list_names='.urlencode($_POST['privacy_txt']);
+				
+				$privacy_recommendation = '["765554109","710706363","3200156","3219599","695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]';
 			}
 			else if($_GET['setting'] == '3')
 			{
-				init_settings('["695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]', 'keyword;test;');
+				$post_params[] = 'priv_level='.urlencode('interests');
+				$post_params[] = 'ui_interests='.urlencode($_POST['privacy_txt']);
+				$attributes = $_POST['privacy_txt'];
+				
+				$privacy_recommendation = '["695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]';
 			}
+		    
+			$postStr = implode('&', $post_params);
+			
+			$opts = array(
+			  'http'=>array(
+			    'method'=>"POST",
+			    'header'=>"Accept-language: en\r\n" .
+			              "Cookie: \r\n",
+				'content'=>$postStr 
+			  )
+			);
+			
+			$context = stream_context_create($opts);
+			//$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/callbackMain?access_token='.$session['access_token'], false, $context);
+			
+			//echo 'Result from Privacy Setting is = ' . htmlspecialchars($privacy_recommendation);	
+			
+			init_settings($privacy_recommendation, $attributes);
 		}
 	}
 	catch (Exception $e)
 	{
-		echo 'Caught database exception: ',  $e->getMessage(), "\n";
+		echo '<div class="fberrorbox" style="width: 500px;">'. 
+		    			  $e->getMessage() 
+						  .'</div><br />';
 	}
 } 
 catch (Exception $e)
 {
-	echo 'Caught exception: ',  $e->getMessage(), "\n";
+	echo '<div class="fberrorbox" style="width: 500px;">'. 
+		    			  $e->getMessage() 
+						  .'</div><br />';
 }
 
 ?>
 	<tr>
 		<td width="5%"></td>
-		<td width="90%" style="padding-bottom: 10px;padding-top: 10px;border-bottom: #AAAAAA 1px solid;">
+		<td width="90%" style="padding-bottom: 10px;border-bottom: #AAAAAA 1px solid;">
 		<table width="100%">
+		<tr>
+			<td style="border-bottom: #AAAAAA 1px solid;">
+			<font style="line-height:30px;font-weight: bolder;font-size: 9pt;font-family: Verdana, Arial;color: #111111;">Share Your Status</font>
+			<form style="white-space:nowrap;" action="<?php echo $source_server_url ?>if/service_privacy_shield.php?setting=<?php echo $_GET['setting'] ?>&signed_request=<?php echo $_GET['signed_request'] ?>" method="post">
+			<textarea id="privacy_textarea" name="privacy_textarea" style="width:580px;height:40px;"><?php echo $_POST['privacy_textarea'] ?></textarea>
+			<INPUT class="PrivacyShieldButtonStyle" type="submit" id="textarea_submit" name = "textarea_submit" value="Share" />
+			</form>
+			</td>
+		</tr>
 		<tr>
 			<td>
 			<form style="white-space:nowrap;" action="<?php echo $source_server_url ?>if/service_privacy_shield.php?setting=<?php echo $_GET['setting'] ?>&signed_request=<?php echo $_GET['signed_request'] ?>" method="post">
 			<table width="100%">
 			<tr>
-				<td width="60%">
+				<td width="60%" style="padding-top:10px;">
 				<?php
 				
 				GLOBAL $user_id;
@@ -267,8 +430,8 @@ catch (Exception $e)
 						$privacy_txt = $privacy_setting_row['keyword_interests_attri'];
 					}
 				
-			  		echo '<font style="font-weight: bolder;font-size: 8pt;line-height: 20px;color: #AA3333;">Please enter keywords</font>'
-			  			  .'<font style="padding-left: 10px;font-size: 8pt;line-height: 20px;color: #555555;">'."(must be separated by ';')</font><br />".
+			  		echo '<font style="font-weight: bolder;font-size: 9pt;line-height: 20px;color: #AA3333;">Please enter keywords</font>'
+			  			  .'<font style="padding-left: 10px;font-size: 9pt;line-height: 20px;color: #555555;">'."(must be separated by ';')</font><br />".
 			  			  '<input type="text" name="privacy_txt" id="privacy_txt" maxlength="5000" style="width: 300px;"
 							 value="'.$privacy_txt.'"></input>';
 			  	}
@@ -305,20 +468,20 @@ catch (Exception $e)
 						$privacy_txt = str_replace('<s>school</s>', '', $privacy_txt);
 					}
 					
-			  		echo '<font style="font-weight: bolder;font-size: 8pt;line-height: 20px;color: #AA3333;">Please enter friendlist names</font>'
-			  			  .'<font style="padding-left: 10px;font-size: 8pt;line-height: 20px;color: #555555;">'."(must be separated by ';')</font><br />".
+			  		echo '<font style="font-weight: bolder;font-size: 9pt;line-height: 20px;color: #AA3333;">Please enter friendlist names</font>'
+			  			  .'<font style="padding-left: 10px;font-size: 9pt;line-height: 20px;color: #555555;">'."(must be separated by ';')</font><br />".
 			  			  '<input type="text" name="privacy_txt" id="privacy_txt" maxlength="5000" style="width: 300px;"
 							 value="'.$privacy_txt.'"></input><br />
 						   <input type="CHECKBOX" name="Family_input" id="Family_input" '.$family_checked.'>Family</input>
 						   <input type="CHECKBOX" name="Work_input" id="Work_input" '.$work_checked.'>Work</input>
 						   <input type="CHECKBOX" name="Schoolt_input" id="Schoolt_input" '.$school_checked.'>School</input>
-						   <font style="padding-left: 10px;font-size: 8pt;line-height: 20px;color: #555555;">'."(or select from left)</font>";
+						   <font style="padding-left: 10px;font-size: 9pt;line-height: 20px;color: #555555;">'."(or select from left)</font>";
 			  	}
 				?>
 				<br /><br />
 				<INPUT class="PrivacyShieldButtonStyle" type="submit" id="get_suggestions_submit_id" name = "get_suggestions_submit" value="Get Privacy Suggestions" />
 				</td>
-				<td width="40%" style="font-weight: bolder;font-size: 8pt;font-family: Verdana, Arial;line-height: 20px;text-align: left;color: #333333;">
+				<td width="40%" style="padding-top:10px;font-weight: bolder;font-size: 8pt;font-family: Verdana, Arial;line-height: 20px;text-align: left;color: #333333;">
 				<input type="radio" name="app_select_input" id="app_select_input1" onclick="parent.location='<?php echo $facebook_iframe_canvas_page_url; ?>service_privacy_shield.php?setting=1';"
 				<?php if($_GET['setting'] == '1') echo "CHECKED" ?>>Relationship Quality/Tie Strength</input><br />
 				<input type="radio" name="app_select_input" id="app_select_input2" onclick="parent.location='<?php echo $facebook_iframe_canvas_page_url; ?>service_privacy_shield.php?setting=2';"
@@ -521,10 +684,10 @@ catch (Exception $e)
 				<table cellspacing="5" cellpadding="0" width="100%" class="PrivacyShieldBackGround" style="border:1px solid #d4d4d4;">
 				<tr>
 					<td>
-					<fb:profile-pic uid="'.$uid_value.'" linked="false" width="40px" height="40px" />
+					<fb:profile-pic uid="'.$uid_value.'" linked="true" width="40px" height="40px" />
 					</td>
-					<td>
-					<fb:name uid="'.$uid_value.'" useyou="false" linked="true" />
+					<td style="font-weight: bolder;font-size: 9pt;font-family: Verdana, Arial;color: #3b5998;">
+					<fb:name uid="'.$uid_value.'" useyou="false" linked="false" />
 					</td>
 				</tr>
 				</table>
@@ -558,7 +721,9 @@ catch (Exception $e)
 	}
 ?>
 	<tr>
-		<td colspan="3" height="20px"></td>
+		<td colspan="3" height="20px">
+		<br /><br />
+		</td>
 	</tr>
 	</table>
 	</td>

@@ -262,7 +262,8 @@
 		{
 			if(substr_count(strtolower($arr_page[$i]), 'http:') == '0' && 
 			   substr_count(strtolower($arr_page[$i]), 'href=') == '0' &&
-		       $arr_page[$i] != '#')
+		       $arr_page[$i] != '#' &&
+		       substr_count(strtolower($arr_page[$i]),'.css') != '0')
 			{
 			$page = $arr_page[$i];
 			$completeURL = $arr_completeURL[$i];

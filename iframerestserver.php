@@ -2381,7 +2381,39 @@ try
 		  		$api_array['target_id'] = $_POST['target_id'];
 		  	if(isset($_POST['uid']))
 		  		$api_array['uid'] = $_POST['uid'];
-		  	if(isset($_POST['privacy']))
+		  		
+		  	$privacy_results = mysql_query("SELECT enable,
+		  										   quality_tie,
+		  										   category_friendlist,
+		  										   keyword_interests FROM privacy_settings 
+		    															  WHERE uid = $faith_uid;", $db);
+		  	
+		  	$in_loop = false;
+		  	while($row = mysql_fetch_array($privacy_results))
+		  	{
+		  		$enable = $row['enable'];
+		  		$quality_tie = $row['quality_tie'];
+		  		$category_friendlist = $row['category_friendlist'];
+		  		$keyword_interests = $row['keyword_interests'];
+		  		
+		  		if($enable == '1' && strlen($quality_tie) > '1')
+		  		{
+		  			$in_loop = true;
+		  			$api_array['privacy'] = '{"value":"CUSTOM","friends":"SOME_FRIENDS","allow":"'.$quality_tie.'",}';
+		  		}
+		  		else if($enable == '2' && strlen($category_friendlist) > '1')
+		  		{
+		  			$in_loop = true;
+		  			$api_array['privacy'] = '{"value":"CUSTOM","friends":"SOME_FRIENDS","allow":"'.$category_friendlist.'",}';
+		  		}
+		  		else if($enable == '3' && strlen($keyword_interests) > '1')
+		  		{
+		  			$in_loop = true;
+		  			$api_array['privacy'] = '{"value":"CUSTOM","friends":"SOME_FRIENDS","allow":"'.$keyword_interests.'",}';
+		  		}
+		  	}
+		  	
+		  	if(!$in_loop && isset($_POST['privacy']))
 		  		$api_array['privacy'] = $_POST['privacy'];
 		  	$result = $facebook->api($api_array);
 	  	}

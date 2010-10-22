@@ -22,6 +22,7 @@
 								   'cookie' => true,));
 	
 	$user_id = $facebook->getUser();
+	$session = $facebook->getSession();
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
 								   transform_add.add_uid_a,

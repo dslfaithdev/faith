@@ -2001,7 +2001,7 @@ try
 	  	}
   	
 	  	if($allowed == '1')
-	  	{
+	  	{ 	
 			$result = $facebook->api_client->stream_publish($_POST['message'],
 															$_POST['attachment'],
 															$_POST['action_links'],
