@@ -157,20 +157,6 @@ try
 	
 	$access_time_end = date("Y-m-d H:i:s");
 	
-	$occurence = substr_count(strtolower($homepage), $canvas_page);
-	
-	for ($i = 1; $i <= $occurence; $i++) 
-	{
-	    $strPos = stripos($homepage, $canvas_page);
-		$endPos = stripos($homepage, '.php', $strPos) + 4;
-		$strPos = $strPos + strlen($canvas_page);
-		
-		$phpFileType = substr($homepage, $strPos, $endPos - $strPos);
-		$homepage = str_replace($canvas_page . $phpFileType, 
-								$FaithFBURL . 'index.php?' . 'ffile=' . urlencode($phpFileType) . '&fpro=' . $fpro, 
-								$homepage);
-	}
-	
 	$href_regex ="href"; // 6 the href bit of the tag
 	$href_regex .="\s*"; // 7 zero or more whitespace
 	$href_regex .="="; // 8 the = of the tag
@@ -196,18 +182,29 @@ try
 	$count = count($arr_completeURL);
 	for ($i = 0; $i < $count; $i++)
 	{
-		if(substr_count(strtolower($arr_page[$i]), 'http:') == '0' && 
-		   substr_count(strtolower($arr_page[$i]), 'href=') == '0' &&
+		if(substr_count(strtolower($arr_page[$i]), 'href=') == '0' &&
 		   $arr_page[$i] != '#')
 		{
-		$page = $arr_page[$i];
-		$completeURL = $arr_completeURL[$i];
-		
-		$replaceStr = str_replace($page , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
-		
-		$homepage = str_replace($arr_completeURL[$i], 
-								$replaceStr,
-								$homepage);
+			if(substr_count(strtolower($arr_page[$i]), 'http:') == '0')
+			{
+				$page = $arr_page[$i];
+				$completeURL = $arr_completeURL[$i];
+				
+				$replaceStr = str_replace($page , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
+				
+				$homepage = str_replace($arr_completeURL[$i], 
+										$replaceStr,
+										$homepage);
+			}
+			else if(substr_count(strtolower($arr_page[$i]), $canvas_page) == '1')
+			{
+				$page = str_replace($canvas_page, '', $arr_page[$i]);
+				$completeURL = $arr_completeURL[$i];
+				$replaceStr = str_replace($arr_page[$i] , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
+				$homepage = str_replace($arr_completeURL[$i], 
+										$replaceStr,
+										$homepage);
+			}
 		}
 	}
 	

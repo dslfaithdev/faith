@@ -25,13 +25,13 @@
 	$session = $facebook->getSession();
 	
 	$has_permission = file_get_contents(
-	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=offline_access&access_token='.$session['access_token'].'&format=json'); 
+	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=read_friendlists&access_token='.$session['access_token'].'&format=json'); 
 	
 	if(!$has_permission ||
 		strripos($has_permission, 'error_code'))
 	{
 		$facebook->request($facebook_iframe_canvas_page_url,
-					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access');
+					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email');
 	}
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
@@ -217,67 +217,146 @@ try
 		if($_POST['add_friend_submit'] == 'Add')
 		{
 			$uid = $_POST['modify_friend_selector'];
-				
-			if(substr_count($list, $uid.',') == '0')
+			$lid = $_POST['friend_list_select'];
+			
+			if($lid != '0' && $lid != NULL)
 			{
-				$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
-												   		  WHERE uid = '%s'",
-												   		  mysql_real_escape_string($list.$uid.','),
-												   		  $user_id);
-								
-				if(!mysql_query($query))
-			    {
-				    echo '<div class="fberrorbox" style="width: 500px;">  
-		    			  Failed to add the user!  
-						  </div><br />';
-					exit();
-			    } 
-			    else
-			    {
-			    	echo '<div class="fbbluebox">  
-	    			You have successfully added the friend!  
+				$friend_results = $facebook->api(array('method'=>'friends.get',
+													   'flid'=>$lid));
+				
+				if(count($friend_results) > 0)
+				{
+					foreach($friend_results as $friend_id)
+					{
+						if(substr_count($list, $friend_id.',') == '0')
+						{
+							$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
+															   		  WHERE uid = '%s'",
+															   		  mysql_real_escape_string($list.$friend_id.','),
+															   		  $user_id);
+											
+						    $list = $list.$friend_id.',';
+							if(!mysql_query($query))
+						    {
+							    echo '<div class="fberrorbox" style="width: 500px;">  
+					    			  Failed to add the user!  
+									  </div><br />';
+						    } 
+						}
+					}
+					echo '<div class="fbbluebox">  
+				    			You have successfully added the friend!  
+								</div><br />';
+				}
+			}
+			else if($uid != NULL)
+			{
+				if(substr_count($list, $uid.',') == '0')
+				{
+					$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
+													   		  WHERE uid = '%s'",
+													   		  mysql_real_escape_string($list.$uid.','),
+													   		  $user_id);
+									
+					if(!mysql_query($query))
+				    {
+					    echo '<div class="fberrorbox" style="width: 500px;">  
+			    			  Failed to add the user!  
+							  </div><br />';
+				    } 
+				    else
+				    {
+				    	echo '<div class="fbbluebox">  
+		    			You have successfully added the friend!  
+						</div><br />';
+				    }
+				}
+				else
+				{
+					echo '<div class="fberrorbox">  
+	    			You have already added the friend!  
 					</div><br />';
-			    }
+				}
 			}
 			else
 			{
-				echo '<div class="fberrorbox">  
-    			You have already added the friend!  
-				</div><br />';
+				echo '<div class="fberrorbox" style="width: 500px;">  
+		    			  Please select a friendlist or enter a valid friend name!  
+						  </div><br />';
 			}
 		}
 		else if($_POST['remove_friend_submit'] == 'Remove')
 		{
 			$uid = $_POST['modify_friend_selector'];
+			$lid = $_POST['friend_list_select'];
 			
-			if(substr_count($list, $uid.',') > '0')
+			if($lid != '0' && $lid != NULL)
 			{
-				$list = str_replace($uid.',', '', $list);
+				$friend_results = $facebook->api(array('method'=>'friends.get',
+													   'flid'=>$lid));
 				
-				$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
-												   		  WHERE uid = '%s'",
-												   		  mysql_real_escape_string($list),
-												   		  $user_id);
-								
-				if(!mysql_query($query))
-			    {
-				    echo '<div class="fberrorbox" style="width: 500px;">  
-		    			  Failed to remove the user!  
-						  </div><br />';
-					exit();
-			    } 
-			    else
-			    {
-			    	echo '<div class="fbbluebox">  
-	    			You have successfully removed the friend!  
+				if(count($friend_results) > 0)
+				{
+					foreach($friend_results as $friend_id)
+					{
+						if(substr_count($list, $friend_id.',') > '0')
+						{
+							$list = str_replace($friend_id.',', '', $list);
+							
+							$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
+															   		  WHERE uid = '%s'",
+															   		  mysql_real_escape_string($list),
+															   		  $user_id);
+											
+							if(!mysql_query($query))
+						    {
+							    echo '<div class="fberrorbox" style="width: 500px;">  
+					    			  Failed to remove the user!  
+									  </div><br />';
+						    } 
+						}
+					}
+					echo '<div class="fbbluebox">  
+				    			You have successfully removed the friend!  
+								</div><br />';
+				}
+			}
+			else if($uid != NULL)
+			{
+				if(substr_count($list, $uid.',') > '0')
+				{
+					$list = str_replace($uid.',', '', $list);
+					
+					$query = sprintf("UPDATE privacy_settings SET $target_field = '%s'
+													   		  WHERE uid = '%s'",
+													   		  mysql_real_escape_string($list),
+													   		  $user_id);
+									
+					if(!mysql_query($query))
+				    {
+					    echo '<div class="fberrorbox" style="width: 500px;">  
+			    			  Failed to remove the user!  
+							  </div><br />';
+				    } 
+				    else
+				    {
+				    	echo '<div class="fbbluebox">  
+		    			You have successfully removed the friend!  
+						</div><br />';
+				    }
+				}
+				else
+				{
+					echo '<div class="fberrorbox">  
+	    			The friend is not in the setting!  
 					</div><br />';
-			    }
+				}
 			}
 			else
 			{
-				echo '<div class="fberrorbox">  
-    			The friend is not in the setting!  
-				</div><br />';
+				echo '<div class="fberrorbox" style="width: 500px;">  
+		    			  Please select a friendlist or enter a valid friend name!  
+						  </div><br />';
 			}
 		}
 		else if($_POST['textarea_submit'] == 'Share')
@@ -534,10 +613,27 @@ catch (Exception $e)
 		<table width="100%">
 		<tr>
 			<td colspan="3" style="padding-bottom: 5px;padding-top: 5px;">
+			<div>
 			<fb:serverFbml style="width: 10px; height: 150px;">
 			<script type="text/fbml">
 			<fb:fbml>
 			<form style="white-space:nowrap;" action="<?php echo $source_server_url ?>if/service_privacy_shield.php?setting=<?php echo $_GET['setting'] ?>&signed_request=<?php echo $_GET['signed_request'] ?>" method="post">
+			<?php
+				$friendlist_results = $facebook->api(array('method'=>'friends.getLists',));
+				
+				if(count($friendlist_results) > 0)
+				{
+					echo '<select name="friend_list_select" id="friend_list_select">
+					  	  <option value="0" selected>Please select a list</option>';
+			
+					foreach($friendlist_results as $friendlist_index => $friendlist_id)
+					{
+						echo '<option value="'.$friendlist_id['flid'].'">'.$friendlist_id['name'].'</option>';
+					}
+					
+					echo '</select>';
+				}
+			?>
 			<fb:friend-selector <?php GLOBAL $user_id; echo 'uid="'.$user_id.'"';?> name="block_friend_selector" 
 			idname="modify_friend_selector"></fb:friend-selector>
 			<INPUT type="submit" id="add_friend" name = "add_friend_submit" value="Add" />
@@ -546,6 +642,7 @@ catch (Exception $e)
 			</fb:fbml>
 			</script>
 			</fb:serverFbml>
+			</div>
 			</td>
 		</tr>
 		<?php 
@@ -731,13 +828,12 @@ catch (Exception $e)
 			$content_html .= '</tr>';
 		}
 		
-		$content_html .= '</table>';
+		$content_html .= '</table><br /><br />';
 		echo $content_html;
 	}
 ?>
 	<tr>
 		<td colspan="3" height="20px">
-		<br /><br />
 		</td>
 	</tr>
 	</table>

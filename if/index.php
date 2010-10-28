@@ -4,6 +4,41 @@
 <style type="text/css">
 <?php echo htmlentities(file_get_contents('../faith_style.css', true)); ?>
 </style>
+<?php 
+	require_once '../func.php';
+	require_once '../vars.php';
+	require_once '../if/src/facebook.php';
+	
+	try
+	{
+		mysqlSetup($db);
+		$facebook = new Facebook(array('appId'  => $iframe_appid,
+								   'secret' => $iframe_appsecret,
+								   'cookie' => true,));
+	
+		$user_id = $facebook->getUser();
+		$session = $facebook->getSession();
+		
+		if(isset($_GET['ffile']) && isset($_GET['fpro']))
+		{
+			$fpro = $_GET['fpro'];
+			$results = mysql_query("SELECT canvas_callback
+										   from facebook_application
+									       where id = $fpro", $db);
+			
+			$row = mysql_fetch_array($results);
+			$canvas_callback = html_entity_decode($row['canvas_callback']);
+			
+echo '
+<link type="text/css" rel="stylesheet" href="'.$canvas_callback.'style.css" />
+';
+		}
+	}
+	catch (Exception $e)
+	{
+		echo 'Caught database exception: ',  $e->getMessage(), "\n";
+	}
+?>
 </head>
 <body>
 <center>
@@ -11,28 +46,21 @@
 <tr>
 	<td>
 	<?php 
-	require_once '../func.php';
-	require_once '../vars.php';
-	require_once '../if/src/facebook.php';
-	
 	try
 	{
-	mysqlSetup($db);
-	$facebook = new Facebook(array('appId'  => $iframe_appid,
-								   'secret' => $iframe_appsecret,
-								   'cookie' => true,));
-	
-	$user_id = $facebook->getUser();
-	$session = $facebook->getSession();
+	GLOBAL $db;
+	GLOBAL $facebook;
+	GLOBAL$user_id;
+	GLOBAL $session;
 	
 	$has_permission = file_get_contents(
-	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=offline_access&access_token='.$session['access_token'].'&format=json'); 
+	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=read_friendlists&access_token='.$session['access_token'].'&format=json'); 
 	
 	if(!$has_permission ||
 		strripos($has_permission, 'error_code'))
 	{
 		$facebook->request($facebook_iframe_canvas_page_url,
-					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access');
+					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email');
 	}
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
@@ -104,9 +132,9 @@
 			$fpro = $_GET['fpro'];
 			
 			$post_params = array();
-			foreach ($_POST as $key => &$val) {
+			foreach ($_POST as $key => $val) {
 				if($key != 'fb_sig_app_id')
-				{
+				{	
 		      		$post_params[] = $key.'='.urlencode($val);
 				}
 		    }
@@ -220,20 +248,6 @@
 		$homepage = file_get_contents($targetURL, false, $context);
 		
 		$access_time_end = date("Y-m-d H:i:s");
-		
-		$occurence = substr_count(strtolower($homepage), $canvas_page);
-	
-		for ($i = 1; $i <= $occurence; $i++) 
-		{
-		    $strPos = stripos($homepage, $canvas_page);
-			$endPos = stripos($homepage, '.php', $strPos) + 4;
-			$strPos = $strPos + strlen($canvas_page);
-			
-			$phpFileType = substr($homepage, $strPos, $endPos - $strPos);
-			$homepage = str_replace($canvas_page . $phpFileType, 
-									$FaithFBURL . 'index.php?' . 'ffile=' . urlencode($phpFileType) . '&fpro=' . $fpro, 
-									$homepage);
-		}
 	
 		$href_regex ="href"; // 6 the href bit of the tag
 		$href_regex .="\s*"; // 7 zero or more whitespace
@@ -260,19 +274,28 @@
 		$count = count($arr_completeURL);
 		for ($i = 0; $i < $count; $i++)
 		{
-			if(substr_count(strtolower($arr_page[$i]), 'http:') == '0' && 
-			   substr_count(strtolower($arr_page[$i]), 'href=') == '0' &&
+			if(substr_count(strtolower($arr_page[$i]), 'href=') == '0' &&
 		       $arr_page[$i] != '#' &&
-		       substr_count(strtolower($arr_page[$i]),'.css') != '0')
+		       substr_count(strtolower($arr_page[$i]),'.css') == '0')
 			{
-			$page = $arr_page[$i];
-			$completeURL = $arr_completeURL[$i];
-			
-			$replaceStr = str_replace($page , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
-			
-			$homepage = str_replace($arr_completeURL[$i], 
-									$replaceStr,
-									$homepage);
+				if(substr_count(strtolower($arr_page[$i]), 'http:') == '0')
+				{
+					$page = $arr_page[$i];
+					$completeURL = $arr_completeURL[$i];
+					$replaceStr = str_replace($page , $source_server_url . 'if/index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
+					$homepage = str_replace($arr_completeURL[$i], 
+											$replaceStr,
+											$homepage);
+				}
+				else if(substr_count(strtolower($arr_page[$i]), $canvas_page) == '1')
+				{
+					$page = str_replace($canvas_page, '', $arr_page[$i]);
+					$completeURL = $arr_completeURL[$i];
+					$replaceStr = str_replace($arr_page[$i] , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
+					$homepage = str_replace($arr_completeURL[$i], 
+											$replaceStr,
+											$homepage);
+				}
 			}
 		}
 		
@@ -301,16 +324,18 @@
 		$count = count($arr_completeURL);
 		for ($i = 0; $i < $count; $i++)
 		{
-			if(substr_count(strtolower($arr_page[$i]), 'http:') == '0')
+			//print_r($_SERVER);
+			if(substr_count(strtolower($arr_page[$i]), 'http:') == '0' &&
+		       $arr_page[$i] != '#')
 			{
-			$page = $arr_page[$i];
-			$completeURL = $arr_completeURL[$i];
-			
-			$replaceStr = str_replace($page , $FaithFBURL . 'index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro, $completeURL);
-			
-			$homepage = str_replace($arr_completeURL[$i], 
-									$replaceStr,
-									$homepage);
+				$page = $arr_page[$i];
+				$completeURL = $arr_completeURL[$i];
+				
+				$replaceStr = str_replace($page , $source_server_url . 'if/index.php?' . 'ffile=' . urlencode($page) . '&fpro=' . $fpro . '&signed_request='.$_GET['signed_request'], $completeURL);
+				
+				$homepage = str_replace($arr_completeURL[$i], 
+										$replaceStr,
+										$homepage);
 			}
 		}
 		
