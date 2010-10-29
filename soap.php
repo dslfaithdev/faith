@@ -11,7 +11,7 @@ $dsl_soap_client = new SoapClient(null,
 
 $failt_srv = new SoapServer(null, array('uri' => "urn://cyrus.cs.ucdavis.edu/dslfaith"));      
 
-function faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, $api_method)
+function faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, $api_method, $result)
 {
 	if(!isset($faith_uid))
 		return false;
@@ -56,29 +56,77 @@ function faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, $api_m
 		$allowed = '0';
 	}
 	
-	$query = sprintf("INSERT INTO access_log (uid, 
-											  api_id,
-											  app_id,
-											  allowed,
-											  access_time,
-											  app_ip_addr,
-											  user_ip_addr) 
-											  VALUES( 
-											  $faith_uid,
-											  (SELECT id FROM restapi where facebook_method = '$api_method'),
-											  $faith_app_id,
-											  $allowed,
-											  NOW(),
-											  INET_ATON('$app_ip_addr'),
-											  INET_ATON('$faith_client_ip'))");
+	$logging_setting = '0';
 	
-											  
-											  
-	if(!mysql_query($query))
+	$results = mysql_query("SELECT logging_setting
+								   from setting_logging
+								   where uid = $faith_uid", $db);
+			
+	while($row = mysql_fetch_array($results))
 	{
-		return false;
-	} 
+		$logging_setting = $row['logging_setting'];
+	}
 	
+	if($logging_setting == '2' || $logging_setting == '3')
+	{
+		//$result = http_build_query($result);
+		if(gettype($result) == 'array')
+		{
+			$array_str = '';
+			foreach($result as $index => $value)
+			{
+				$array_str = $array_str . ' { Array ' . $index . ' -> ';
+				
+				if(gettype($value) == 'array')
+				{
+					foreach($value as $inner_index => $inner_value)
+					{
+						$array_str = $array_str . ' [ Array ' . $inner_index . ' -> ';
+						
+						if(gettype($inner_value) == 'array')
+						{
+							foreach($inner_value as $most_inner_index => $most_inner_value)
+							{
+								$array_str = $array_str . ' ( Array ' . $most_inner_index . ' -> ' . $most_inner_value . ' ) ';
+							}
+							
+							$array_str = $array_str . ' ] ';
+						}
+						else
+						{
+							$array_str = $array_str . $inner_value . ' ] ';
+						}
+					}
+				}
+				
+				$array_str = $array_str . ' } ';
+			}
+			$result = $array_str;
+		}
+		
+		date_default_timezone_set('America/Los_Angeles');
+		$time_added = date("Y-m-d H:i:s");
+		$query = sprintf("INSERT INTO access_log (uid, 
+												  app_id,
+												  allowed,
+												  access_time,
+												  logdetails,
+												  api_id,
+												  app_ip_addr,
+												  user_ip_addr) 
+												  VALUES('%s','%s','%s','%s','%s',(SELECT id FROM restapi where facebook_method = '$api_method'),INET_ATON('$app_ip_addr'),INET_ATON('$faith_client_ip'))",
+												  $faith_uid,
+												  mysql_real_escape_string($faith_app_id),
+												  mysql_real_escape_string($allowed),
+												  mysql_real_escape_string($time_added),
+												  mysql_real_escape_string($result),
+												  mysql_real_escape_string($faith_url_id));
+								  
+		if(!mysql_query($query))
+		{
+			return false;
+		} 
+	}
 	if($Count_Num > 0)
 	{
 		return false;
@@ -94,37 +142,46 @@ $failt_srv->addFunction("dsl_isPositiveInt");
 
 //UID to Name
 function uidToName($uid, $faith_uid, $faith_client_ip, $faith_app_id){
-
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "uidToName"))
-  	return "";
 	
   global $dsl_soap_client;
 
   if(!dsl_isPositiveInt($uid))
     return "";
 	
-  return $dsl_soap_client->__soapCall("uidToName",array($uid));
+  $result = $dsl_soap_client->__soapCall("uidToName",array($uid));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "uidToName", $result))
+  {
+  	return "";
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("uidToName");
 
 //Name to UID
 function nameToUid($name, $faith_uid, $faith_client_ip, $faith_app_id){
-
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "nameToUid"))
-  	return "";
 	
   global $dsl_soap_client;
 
-  return $dsl_soap_client->__soapCall("nameToUid",array($name));
+  $result = $dsl_soap_client->__soapCall("nameToUid",array($name));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "nameToUid", $result))
+  {	
+  	return "";
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("nameToUid");
 
 //Note that findSocialPath returns an array of (nodes,trust) pairs connecting the source user to the destination.
 function findSocialPath($src,$dest, $faith_uid, $faith_client_ip, $faith_app_id){
 	
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findSocialPath"))
-  	return -1;
-	
   global $dsl_soap_client;
 
   if(!dsl_isPositiveInt($src))
@@ -132,16 +189,22 @@ function findSocialPath($src,$dest, $faith_uid, $faith_client_ip, $faith_app_id)
   if(!dsl_isPositiveInt($dest))
     return -2;
 
-  return $dsl_soap_client->__soapCall("findSocialPath",array($src,$dest));
+  $result = $dsl_soap_client->__soapCall("findSocialPath",array($src,$dest));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findSocialPath", $result))
+  {
+  	return -1;
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("findSocialPath");
 
 //Like findSocialPath but returns an array of paths.
 function findMultipleSocialPaths($src,$dest, $faith_uid, $faith_client_ip, $faith_app_id){
 	
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findMultipleSocialPaths"))
-  	return -1;
-	
   global $dsl_soap_client;
 
   if(!dsl_isPositiveInt($src))
@@ -149,15 +212,21 @@ function findMultipleSocialPaths($src,$dest, $faith_uid, $faith_client_ip, $fait
   if(!dsl_isPositiveInt($dest))
     return -2;
 
-  return $dsl_soap_client->__soapCall("findMultipleSocialPaths",array($src,$dest));
+  $result = $dsl_soap_client->__soapCall("findMultipleSocialPaths",array($src,$dest));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findMultipleSocialPaths", $result))
+  {
+  	return -1;
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("findMultipleSocialPaths");
 
 //Note that findTargets (a) requires an array of keywords for input, even if it is only one keyword, and (b) returns an array of (nodes,distance) pairs.
 function findTargets($src,$keywords, $faith_uid, $faith_client_ip, $faith_app_id){
-	
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findTargets"))
-  	return -1;
 	
   global $dsl_soap_client;
 
@@ -166,16 +235,27 @@ function findTargets($src,$keywords, $faith_uid, $faith_client_ip, $faith_app_id
   if(!is_array($keywords))
     return -2;
 
-  return $dsl_soap_client->__soapCall("findTargets",array("3200156",$keywords));
+  $result = $dsl_soap_client->__soapCall("findTargets",array("3200156",$keywords));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findTargets", $result))
+  {	
+  	return -1;
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("findTargets");
 
 //Note that setOutcome (a) requires an array of nodes along the path for input and (b) returns "1" always.
 function setOutcome($path, $outcome, $faith_uid, $faith_client_ip, $faith_app_id){
-	
+
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "setOutcome"))
+  {
   	return -1;
-	
+  }
+  
   global $dsl_soap_client;
 
   if(!is_array($path))
@@ -192,38 +272,47 @@ $failt_srv->addFunction("setOutcome");
 //UID that passed the keyword on to the user.
 function getReceivedKeywords($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getReceivedKeywords"))
-  	return array();
-	
   global $dsl_soap_client;
 
   if(!dsl_isPositiveInt($uid))
     return array();
 
-  return $dsl_soap_client->__soapCall("getReceivedKeywords",array($uid));
+  $result = $dsl_soap_client->__soapCall("getReceivedKeywords",array($uid));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getReceivedKeywords", $result))
+  {	
+  	return array();
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("getReceivedKeywords");
 
 //Note that getFriends returns an array. Returns all friends who are also using DSL.
 function getFriends($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
-   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getFriends"))
-  	return array();
-	
   global $dsl_soap_client;
 
   if(!dsl_isPositiveInt($uid))
     return array();
 
-  return $dsl_soap_client->__soapCall("getFriends",array($uid));
+  $result = $dsl_soap_client->__soapCall("getFriends",array($uid));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getFriends", $result))
+  {	
+  	return array();
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("getFriends");
 
 //How much does $truster trust $trustee?
 function getTrust($truster, $trustee, $faith_uid, $faith_client_ip, $faith_app_id){
-	
-  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getTrust"))
-  	return -1;
 	
   global $dsl_soap_client;
 
@@ -232,7 +321,16 @@ function getTrust($truster, $trustee, $faith_uid, $faith_client_ip, $faith_app_i
   if(!dsl_isPositiveInt($trustee))
     return -2;
 
-  return $dsl_soap_client->__soapCall("getTrust",array($truster,$trustee));
+  $result = $dsl_soap_client->__soapCall("getTrust",array($truster,$trustee));
+  
+  if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getTrust", $result))
+  {	
+  	return -1;
+  }
+  else
+  {
+  	return $result;
+  }
 }
 $failt_srv->addFunction("getTrust");
 
