@@ -145,9 +145,6 @@ function uidToName($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($uid))
-    return "";
-	
   $result = $dsl_soap_client->__soapCall("uidToName",array($uid));
   
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "uidToName", $result))
@@ -184,11 +181,6 @@ function findSocialPath($src,$dest, $faith_uid, $faith_client_ip, $faith_app_id)
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($src))
-    return -1;
-  if(!dsl_isPositiveInt($dest))
-    return -2;
-
   $result = $dsl_soap_client->__soapCall("findSocialPath",array($src,$dest));
   
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findSocialPath", $result))
@@ -207,11 +199,6 @@ function findMultipleSocialPaths($src,$dest, $faith_uid, $faith_client_ip, $fait
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($src))
-    return -1;
-  if(!dsl_isPositiveInt($dest))
-    return -2;
-
   $result = $dsl_soap_client->__soapCall("findMultipleSocialPaths",array($src,$dest));
   
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "findMultipleSocialPaths", $result))
@@ -229,11 +216,6 @@ $failt_srv->addFunction("findMultipleSocialPaths");
 function findTargets($src,$keywords, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
-
-  if(!dsl_isPositiveInt($src))
-    return -1;
-  if(!is_array($keywords))
-    return -2;
 
   $result = $dsl_soap_client->__soapCall("findTargets",array("3200156",$keywords));
   
@@ -274,9 +256,6 @@ function getReceivedKeywords($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($uid))
-    return array();
-
   $result = $dsl_soap_client->__soapCall("getReceivedKeywords",array($uid));
   
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getReceivedKeywords", $result))
@@ -295,9 +274,6 @@ function getFriends($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($uid))
-    return array();
-
   $result = $dsl_soap_client->__soapCall("getFriends",array($uid));
   
   if(!faith_accessAllowed($faith_uid, $faith_client_ip, $faith_app_id, "getFriends", $result))
@@ -315,11 +291,6 @@ $failt_srv->addFunction("getFriends");
 function getTrust($truster, $trustee, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
-
-  if(!dsl_isPositiveInt($truster))
-    return -1;
-  if(!dsl_isPositiveInt($trustee))
-    return -2;
 
   $result = $dsl_soap_client->__soapCall("getTrust",array($truster,$trustee));
   
@@ -357,9 +328,6 @@ function addUser($uid,$name, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($uid))
-    return -1;
-  
   return $dsl_soap_client->__soapCall("addUser",array($uid,$name));
 }
 $failt_srv->addFunction("addUser");
@@ -372,9 +340,6 @@ function removeUser($uid, $faith_uid, $faith_client_ip, $faith_app_id){
 	
   global $dsl_soap_client;
 
-  if(!dsl_isPositiveInt($uid))
-    return -1;
-
   return $dsl_soap_client->__soapCall("removeUser",array($uid));
 }
 $failt_srv->addFunction("removeUser");
@@ -386,9 +351,6 @@ function getPic($uid, $faith_uid, $faith_client_ip, $faith_app_id){
   	return -1;
 	
   global $dsl_soap_client;
-
-  if(!dsl_isPositiveInt($uid))
-    return -1;
   
   return $dsl_soap_client->__soapCall("getPic",array($uid));
 }
