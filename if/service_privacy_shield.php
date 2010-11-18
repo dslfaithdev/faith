@@ -25,13 +25,20 @@
 	$session = $facebook->getSession();
 	
 	$has_permission = file_get_contents(
-	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=read_friendlists&access_token='.$session['access_token'].'&format=json'); 
+	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=user_about_me&access_token='.$session['access_token'].'&format=json'); 
 	
 	if(!$has_permission ||
 		strripos($has_permission, 'error_code'))
 	{
 		$facebook->request($facebook_iframe_canvas_page_url,
-					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email');
+		'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email'.
+		',user_about_me,friends_about_me,user_activities,friends_activities,user_birthday,friends_birthday,user_education_history'.
+		',friends_education_history,user_events,friends_events,user_groups,friends_groups,user_hometown,friends_hometown,user_interests'.
+		',friends_interests,user_likes,friends_likes,user_location,friends_location,user_notes,friends_notes,user_online_presence'.
+		',friends_online_presence,user_photo_video_tags,friends_photo_video_tags,user_photos,friends_photos,user_relationships'.
+		',friends_relationships,user_relationship_details,friends_relationship_details,user_religion_politics,friends_religion_politics'.
+		',user_status,friends_status,user_videos,friends_videos,user_website,friends_website,user_work_history,friends_work_history'.
+		',read_insights,read_mailbox,read_requests,read_stream,user_checkins,friends_checkins');
 	}
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
@@ -411,8 +418,6 @@ try
 			if($_GET['setting'] == '1')
 			{
 				$post_params[] = 'priv_level='.urlencode('r_quality');
-				
-				$privacy_recommendation = '["765554109", "3200156", "3219599", "695694021", "759410694", "581205756", "621651366"]';
 			}
 			else if($_GET['setting'] == '2')
 			{
@@ -438,16 +443,12 @@ try
 				}
 				
 				$post_params[] = 'ui_list_names='.urlencode($_POST['privacy_txt']);
-				
-				$privacy_recommendation = '["765554109","710706363","3200156","3219599","695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]';
 			}
 			else if($_GET['setting'] == '3')
 			{
 				$post_params[] = 'priv_level='.urlencode('interests');
 				$post_params[] = 'ui_interests='.urlencode($_POST['privacy_txt']);
 				$attributes = $_POST['privacy_txt'];
-				
-				$privacy_recommendation = '["695694021","1004264792","3224061","1214439232","639273140","759410694","1080532999","581205756","621651366","513817635"]';
 			}
 		    
 			$postStr = implode('&', $post_params);
@@ -462,9 +463,12 @@ try
 			);
 			
 			$context = stream_context_create($opts);
-			//$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/callbackMain?access_token='.$session['access_token'], false, $context);
+			$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/callbackMain?access_token='.$session['access_token']."&uid=".$user_id, false, $context);
 			
-			//echo 'Result from Privacy Setting is = ' . htmlspecialchars($privacy_recommendation);	
+			if($user_id == '710706363')
+			{
+				echo 'Result from Privacy Setting is = ' . htmlspecialchars($privacy_recommendation);	
+			}
 			
 			init_settings($privacy_recommendation, $attributes);
 		}

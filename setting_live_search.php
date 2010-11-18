@@ -83,9 +83,9 @@ if($option == '1')
 		  <li style="color: #AA3333;padding-left: 10px;">
 		  	Access Log Setting
 		  </li>
-		  <hr>
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
+		  <hr>'.
+		  //<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
+		  '<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,2".');" name="setting_select_input" id="Enable_API" '.$api_checked.' value="2">Enable API Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />
@@ -215,9 +215,9 @@ else if($option == '2')
 		  <li style="color: #AA3333;padding-top: 10px;padding-left: 10px;">
 		  	<a href="#" onclick="do_clsoe_get_faith_setting();">close</a>
 		  </li>
-		  <hr>
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
+		  <hr>'.
+		  //<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
+		  '<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,2".');" name="setting_select_input" id="Enable_API" '.$api_checked.' value="2">Enable API Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />
@@ -311,9 +311,9 @@ else if($option == '3')
 		  <li style="color: #AA3333;padding-left: 10px;">
 		  	Access Log Setting
 		  </li>
-		  <hr>
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
-		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
+		  <hr>'.
+		  //<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,0".');" name="setting_select_input" id="Disable_Logging" '.$disable_checked.' value="0">Disable Logging</input><br />
+		  '<input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,1".');" name="setting_select_input" id="Enable_URL" '.$url_checked.' value="1">Enable URL Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,2".');" name="setting_select_input" id="Enable_API" '.$api_checked.' value="2">Enable API Logging Only</input><br />
 		  <input type="radio" onclick="do_change_faith_setting_ajax('."'".$user_id."',2,3".');" name="setting_select_input" id="Enable_Logging" '.$enable_checked.' value="3">Enable Logging</input>
 		  <br /><br /><br />

@@ -29,10 +29,41 @@
 			$row = mysql_fetch_array($results);
 			$canvas_callback = html_entity_decode($row['canvas_callback']);
 			
-echo '
-<link type="text/css" rel="stylesheet" href="'.$canvas_callback.'style.css" />
-';
+			echo '
+			<link type="text/css" rel="stylesheet" href="'.$canvas_callback.'style.css" />
+			';
 		}
+		
+		//-----------------------------------------------------------
+		$logging_enabld = false;
+		$results = mysql_query("SELECT logging_setting
+									   from setting_logging
+									   where uid = $user_id", $db);
+		
+		while($row = mysql_fetch_array($results))
+		{
+			$logging_setting = $row['logging_setting'];
+			$disable_checked = '';
+			
+			if($logging_setting == '1' || $logging_setting == '2' || $logging_setting == '3')
+			{
+				$logging_enabld = true;
+			}
+		}
+		
+		if(!$logging_enabld)
+		{
+			$query = sprintf("INSERT INTO setting_logging (uid, 
+											 			   logging_setting) 
+											 			   VALUES('%s', '%s')",
+														   mysql_real_escape_string($user_id), 
+											 			   mysql_real_escape_string("3"));
+			if(!mysql_query($query))
+		    {	
+		    	
+		    }
+		}
+		//-----------------------------------------------------------
 	}
 	catch (Exception $e)
 	{
@@ -54,13 +85,20 @@ echo '
 	GLOBAL $session;
 	
 	$has_permission = file_get_contents(
-	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=read_friendlists&access_token='.$session['access_token'].'&format=json'); 
+	'https://api.facebook.com/method/users.hasAppPermission?ext_perm=user_about_me&access_token='.$session['access_token'].'&format=json'); 
 	
 	if(!$has_permission ||
 		strripos($has_permission, 'error_code'))
 	{
 		$facebook->request($facebook_iframe_canvas_page_url,
-					   	   'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email');
+		'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access,read_friendlists,email'.
+		',user_about_me,friends_about_me,user_activities,friends_activities,user_birthday,friends_birthday,user_education_history'.
+		',friends_education_history,user_events,friends_events,user_groups,friends_groups,user_hometown,friends_hometown,user_interests'.
+		',friends_interests,user_likes,friends_likes,user_location,friends_location,user_notes,friends_notes,user_online_presence'.
+		',friends_online_presence,user_photo_video_tags,friends_photo_video_tags,user_photos,friends_photos,user_relationships'.
+		',friends_relationships,user_relationship_details,friends_relationship_details,user_religion_politics,friends_religion_politics'.
+		',user_status,friends_status,user_videos,friends_videos,user_website,friends_website,user_work_history,friends_work_history'.
+		',read_insights,read_mailbox,read_requests,read_stream,user_checkins,friends_checkins');
 	}
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,

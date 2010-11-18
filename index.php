@@ -17,8 +17,6 @@
 	{
 	mysqlSetup($db);
 	$facebook = new Facebook($appapikey, $appsecret);
-	
-	// This is from old library right??
 	$user_id = $facebook->require_login();
 	
 	$results = mysql_query("SELECT transform_add.transform_add_id,
@@ -38,6 +36,37 @@
 	}
 	
 	display_header_links($div_counter, $user_id);
+	
+	//-----------------------------------------------------------
+	$logging_enabld = false;
+	$results = mysql_query("SELECT logging_setting
+								   from setting_logging
+								   where uid = $user_id", $db);
+	
+	while($row = mysql_fetch_array($results))
+	{
+		$logging_setting = $row['logging_setting'];
+		$disable_checked = '';
+		
+		if($logging_setting == '1' || $logging_setting == '2' || $logging_setting == '3')
+		{
+			$logging_enabld = true;
+		}
+	}
+	
+	if(!$logging_enabld)
+	{
+		$query = sprintf("INSERT INTO setting_logging (uid, 
+										 			   logging_setting) 
+										 			   VALUES('%s', '%s')",
+													   mysql_real_escape_string($user_id), 
+										 			   mysql_real_escape_string("3"));
+		if(!mysql_query($query))
+	    {	
+	    	
+	    }
+	}
+	//-----------------------------------------------------------
 	
 	}
 	catch (Exception $e)
