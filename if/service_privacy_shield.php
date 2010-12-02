@@ -392,6 +392,11 @@ try
 				
 				if(strlen($privacy_list) >= 2)
 				{
+					$position = strpos($privacy_list, ')');
+					$p_id = substr($privacy_list, 0, $position);
+					$p_id = substr($p_id, 1);
+					$privacy_list = substr($privacy_list, $position + 1);
+					
 					$privacy_string = '{"value":"CUSTOM","friends":"SOME_FRIENDS","allow":"'.$privacy_list.'",}';
 					
 					$results = $facebook->api(array('method'=>'stream.publish',
@@ -401,6 +406,44 @@ try
 				    echo '<div class="fbbluebox">  
 	    			Your message has been posted sucessfully!  
 					</div><br />';
+				    
+				    try
+				    {
+				    	$split_list_array = explode(",", $privacy_list);
+						$final_list = '[';
+						foreach ($split_list_array as $uid_key => $uid_value)
+						{
+							if(strlen($uid_value) > 0)
+							{
+								$final_list = $final_list . '"'.$uid_value.'"';
+							}
+						}
+						$final_list = $final_list . ']';
+						$final_list = str_replace('""', '", "', $final_list);
+						
+				    	$post_params = array();
+				    	$post_params[] = 'p_id='.urlencode($p_id);
+						$post_params[] = 'allowed_ids_list='.urlencode($final_list);
+						$post_params[] = 'uid='.urlencode($user_id);
+						$post_params[] = 'post_text='.urlencode($message);
+						$postStr = implode('&', $post_params);
+			
+						$opts = array(
+						  'http'=>array(
+						    'method'=>"POST",
+						    'header'=>"Accept-language: en\r\n" .
+						              "Cookie: \r\n",
+							'content'=>$postStr 
+						  )
+						);
+						
+						$context = stream_context_create($opts);
+						file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/update_out_tables', false, $context);
+					}
+				    catch (Exception $e)
+				    {
+				    	
+				    }
 				}
 			}
 			else
@@ -465,7 +508,7 @@ try
 			$context = stream_context_create($opts);
 			$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/callbackMain?access_token='.$session['access_token']."&uid=".$user_id, false, $context);
 			
-			if($user_id == '710706363')
+			if($user_id == '1217497564' || $user_id == '710706363')
 			{
 				echo 'Result from Privacy Setting is = ' . htmlspecialchars($privacy_recommendation);	
 			}
@@ -709,8 +752,8 @@ catch (Exception $e)
 				
 			$quality_tie_arr = json_decode($uid_list, true);
 			
-			$quality_tie_list = '';
-			foreach($quality_tie_arr as $privacy_uid)
+			$quality_tie_list = '('.$quality_tie_arr["p_id"].')';
+			foreach($quality_tie_arr["allowed"] as $privacy_uid)
 			{
 				$quality_tie_list .= $privacy_uid . ',';
 			}
@@ -770,6 +813,11 @@ catch (Exception $e)
 			}
 			else
 			{
+				$position = strpos($list, ')');
+				$p_id = substr($list, 0, $position);
+				$p_id = substr($p_id, 1);
+				$list = substr($list, $position + 1);
+					
 				display_list($list);
 			}
 		}
