@@ -21,7 +21,7 @@
 		<?php
 	require_once '../vars.php';
 	require_once '../facebook.php';
-	require_once './func.php';
+	require_once '../func.php';
 	
 	try
 	{	

@@ -24,6 +24,7 @@ $faith_dsl_replay = '44';
 //URLs & Paths
 $source_server_url = "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"; 			// "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"
 $facebook_canvas_page_url = "http://apps.facebook.com/dsl_faith/"; 				// "http://apps.facebook.com/dsl_faith/"
+$facebook_canvas_page_url = "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/";  				// "http://apps.facebook.com/dsl_faith/"
 $facebook_iframe_canvas_page_url = "http://apps.facebook.com/dsl_faith_iframe/"; 	// "http://apps.facebook.com/dsl_faith_iframe/"
 $source_folder_path = "/home/dslfaith/public_html/faith/";							// "/home/dslfaith/public_html/faith/"
 
