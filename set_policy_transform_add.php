@@ -189,6 +189,7 @@
 				
 				function print_search_bar($current_uid, $uid_list)
 				{
+/* FER edit.
 					echo '<tr><td>
 							<form action="set_policy_transform_add.php" method="post">
 							<fb:friend-selector uid="'.$current_uid.'" name="find_friend_selector" idname="find_friend_selector"></fb:friend-selector>
@@ -200,6 +201,17 @@
 							Search from <fb:name uid="'.$current_uid.'" useyou="false" linked="true" />'."'".' friends
 							</font>
 							</form></td></tr>';
+							*/
+					echo '<tr><td>
+							<form action="set_policy_transform_add.php" method="post">
+							<font style="padding-left: 15px; padding-right: 15px;font-weight: bold;Color: #AA3333;">
+							Add an uid from <fb:name uid="'.$current_uid.'" useyou="false" linked="true" />'."'".' friends to create a Social Network Transformation.
+							</font><br/>
+							<input type="text" name="find_friend_selector" id="find_friend_selector"/>
+							<input type="hidden" name="uid_list" value="'.$uid_list.'"/>
+							<INPUT type="submit" id="add_friend" name = "find_friend_submit" value="Add" />
+							</form></td></tr>';
+/*end FER edit.*/
 				}
 				
 				?>

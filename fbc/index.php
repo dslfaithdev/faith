@@ -432,9 +432,7 @@ function get_live_search_contents($user_id)
 		<a style="padding-right:15px;padding-left:15px;" href="http://www.ucdavis.edu/" target="_blank">
 		<img src="'.$source_server_url.'image/uc-davis.jpg" style="border-style: none" />
 		</a>
-		<a style="padding-right:15px;padding-left:15px;" href="http://dsl.cs.ucdavis.edu/lab_website/index.php" target="_blank">
-		<img src="'.$source_server_url.'image/dsl.jpg" style="border-style: none" />
-		</a>
+		<img src="'.$source_server_url.'image/ns_CTA.png" style="border-style: none" />
 		</div>
 		</td></tr>
 		</table>

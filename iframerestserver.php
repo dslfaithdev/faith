@@ -12,7 +12,8 @@ try
 	fwrite($fh, $stringData);
 	
 	$facebook;
-	if(isset($_POST['faith_source']) && $_POST['faith_source'] == $faith_iframe)	//*FAITH*
+	if(isset($_POST['faith_source']) && 
+	   ($_POST['faith_source'] == $faith_iframe) || ($_POST['faith_source'] == $faith_iframe_replay))	//*FAITH*
 	{
 		$facebook = new Facebook(array('appId'  => $iframe_appid,
 									   'secret' => $iframe_appsecret,
@@ -3092,27 +3093,55 @@ try
 	{
 	date_default_timezone_set('America/Los_Angeles');
 	$time_added = date("Y-m-d H:i:s");
-	$query = sprintf("INSERT INTO access_log (uid, 
-											  app_id,
-											  allowed,
-											  access_time,
-											  logdetails,
-											  url_id,
-											  api_id,
-											  app_ip_addr,
-											  user_ip_addr) 
-											  VALUES('%s','%s','%s','%s','%s','%s',(SELECT id FROM restapi where facebook_method = '$api_method'),INET_ATON('$app_ip_addr'),INET_ATON('$faith_client_ip'))",
-											  $faith_uid,
-											  mysql_real_escape_string($faith_app_id),
-											  mysql_real_escape_string($allowed),
-											  mysql_real_escape_string($time_added),
-											  mysql_real_escape_string($result),
-											  mysql_real_escape_string($faith_url_id));
 	
-	//'$result'
-	if(!mysql_query($query))
+	if($_POST['faith_source'] == $faith_iframe)
 	{
-		fwrite($fh, "(iframerestserver.php)Query failed" . mysql_error() ."\n");
+		$query = sprintf("INSERT INTO access_log (uid, 
+												  app_id,
+												  allowed,
+												  access_time,
+												  logdetails,
+												  url_id,
+												  parameter,
+												  sessionkey,
+												  replay_type,
+												  api_id,
+												  app_ip_addr,
+												  user_ip_addr) 
+												  VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s',(SELECT id FROM restapi where facebook_method = '$api_method'),INET_ATON('$app_ip_addr'),INET_ATON('$faith_client_ip'))",
+												  $faith_uid,
+												  mysql_real_escape_string($faith_app_id),
+												  mysql_real_escape_string($allowed),
+												  mysql_real_escape_string($time_added),
+												  mysql_real_escape_string($result),
+												  mysql_real_escape_string($faith_url_id),
+												  mysql_real_escape_string(json_encode($api_array)),
+												  mysql_real_escape_string($access_token),
+												  mysql_real_escape_string($faith_iframe_replay));
+	
+		//'$result'
+		if(!mysql_query($query))
+		{
+			fwrite($fh, "(iframerestserver.php)Query failed" . mysql_error() ."\n");
+		}
+	}
+	else if($_POST['faith_source'] == $faith_iframe_replay)
+	{
+		$query = sprintf("INSERT INTO access_log_replay (allowed,
+												  		 access_time,
+												  		 logdetails,
+												  		 logID) 
+												  VALUES('%s','%s','%s','%s')",
+												  mysql_real_escape_string($allowed),
+												  mysql_real_escape_string($time_added),
+												  mysql_real_escape_string($result),
+												  mysql_real_escape_string($_POST['replay_lod_id']));
+	
+		//'$result'
+		if(!mysql_query($query))
+		{
+			fwrite($fh, "(iframerestserver.php)Query failed" . mysql_error() ."\n");
+		}
 	}
 	}
 	

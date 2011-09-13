@@ -2,8 +2,41 @@
 <head>
 <title> Welcome to DSL FAITH (IFrame) </title>
 <style type="text/css">
+#bubble_tooltip{
+	width:147px;
+	position:absolute;
+	display:none;
+}
+#bubble_tooltip .bubble_top{
+	background-image: url('../image/bubble_top.gif');
+	background-repeat:no-repeat;
+	height:16px;	
+}
+#bubble_tooltip .bubble_middle{
+	background-image: url('../image/bubble_middle.gif');
+	background-repeat:repeat-y;	
+	background-position:bottom left;
+	padding-left:7px;
+	padding-right:7px;
+}
+#bubble_tooltip .bubble_middle span{
+	position:relative;
+	top:-8px;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	font-size:11px;
+}
+#bubble_tooltip .bubble_bottom{
+	background-image: url('../image/bubble_bottom.gif');
+	background-repeat:no-repeat;
+	background-repeat:no-repeat;	
+	height:44px;
+	position:relative;
+	top:-6px;
+}
 <?php echo htmlentities(file_get_contents('../faith_style.css', true)); ?>
 </style>
+<link rel="stylesheet" href="bubble-tooltip.css" media="screen">
+<script type="text/javascript" src="bubble-tooltip.js"></script>
 </head>
 <body>
 <center>
@@ -461,6 +494,9 @@ try
 			if($_GET['setting'] == '1')
 			{
 				$post_params[] = 'priv_level='.urlencode('r_quality');
+				
+				//$post_params[] = 'uid='.urlencode($user_id);
+				//$post_params[] = 'friend_id='.urlencode('1004264792');
 			}
 			else if($_GET['setting'] == '2')
 			{
@@ -507,6 +543,9 @@ try
 			
 			$context = stream_context_create($opts);
 			$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/callbackMain?access_token='.$session['access_token']."&uid=".$user_id, false, $context);
+			
+			//$privacy_recommendation = file_get_contents('http://cyrus.cs.ucdavis.edu/~leeru/faith/if/faithvirtualgraph.php?op=get_remove_nodes', false, $context);
+			
 			
 			if($user_id == '1217497564' || $user_id == '710706363')
 			{
@@ -690,6 +729,13 @@ catch (Exception $e)
 			</script>
 			</fb:serverFbml>
 			</div>
+			
+			<div id="bubble_tooltip">
+				<div class="bubble_top"><span></span></div>
+				<div class="bubble_middle"><span id="bubble_tooltip_content">Content is comming here as you probably can see.Content is comming here as you probably can see.</span></div>
+				<div class="bubble_bottom"></div>
+			</div>
+			
 			</td>
 		</tr>
 		<?php 
@@ -818,15 +864,16 @@ catch (Exception $e)
 				$p_id = substr($p_id, 1);
 				$list = substr($list, $position + 1);
 					
-				display_list($list);
+				display_list($list, $p_id);
 			}
 		}
 	}
 
-	function display_list($list)
+	function display_list($list, $p_id)
 	{
 		GLOBAL $source_server_urlimage;
-	
+		GLOBAL $user_id;
+		
 		$split_list_array = explode(",", $list);
 		$content_html = '';
 		
@@ -851,7 +898,12 @@ catch (Exception $e)
 					<fb:profile-pic uid="'.$uid_value.'" linked="true" width="40px" height="40px" />
 					</td>
 					<td style="font-weight: bolder;font-size: 9pt;font-family: Verdana, Arial;color: #3b5998;">
+					
+					
+					<a href="#" onmouseover="showToolTip(event,'.$user_id.','.$uid_value.','.$p_id.');return false"
+								onmouseout="hideToolTip()">
 					<fb:name uid="'.$uid_value.'" useyou="false" linked="false" />
+					</a>
 					</td>
 				</tr>
 				</table>
@@ -892,7 +944,55 @@ catch (Exception $e)
 	</td>
 </tr>
 </table>
+<script type="text/javascript">
 
+function showToolTip(e,uid,fuid,p_id){
+
+	if (window.XMLHttpRequest)
+  	{// code for IE7+, Firefox, Chrome, Opera, Safari
+  		xmlhttp=new XMLHttpRequest();
+  	}
+	else
+  	{// code for IE6, IE5
+  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  	}
+	xmlhttp.onreadystatechange=	function()
+  	{
+  		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    	{
+    		//document.getElementById('bubble_tooltip_content').innerHTML = xmlhttp.responseText;
+
+    		var myObject = eval('(' + xmlhttp.responseText + ')');
+    		document.getElementById('bubble_tooltip_content').innerHTML = 
+        		'<font style="font-weight: bolder;font-size: 9pt;color: #333333;">Number of Interaction</font> : <font style="font-weight: bolder;font-size: 9pt;color: #AA3333;">' + myObject.num_ints + '</font><br /><br />' +
+    			'<font style="font-weight: bolder;font-size: 9pt;color: #333333;">Number of Mutual Friends</font> : <font style="font-weight: bolder;font-size: 9pt;color: #AA3333;">' + myObject.num_mutual_friends + '</font>';
+    		
+    	}
+  	}
+	xmlhttp.open("POST","http://cyrus.cs.ucdavis.edu/~banksl/hellominifb/priv_shield.py/mo_data",true);
+	xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xmlhttp.send("uid="+uid+"&friend_id="+fuid+"&p_id="+p_id);
+
+	
+	if(document.all)e = event;
+	
+	var obj = document.getElementById('bubble_tooltip');
+	var obj2 = document.getElementById('bubble_tooltip_content');
+	obj.style.display = 'block';
+	var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+	if(navigator.userAgent.toLowerCase().indexOf('safari')>=0)st=0; 
+	var leftPos = e.clientX - 100;
+	if(leftPos<0)leftPos = 0;
+	obj.style.left = leftPos + 'px';
+	obj.style.top = e.clientY - obj.offsetHeight -1 + st + 'px';
+}	
+
+function hideToolTip()
+{
+	document.getElementById('bubble_tooltip').style.display = 'none';
+}
+
+</script>
 </center>
 </body>
 </html>

@@ -12,7 +12,8 @@ try
 	fwrite($fh, $stringData);
 	
 	$facebook;
-	if(isset($_POST['faith_source']) && $_POST['faith_source'] == $faith_fbml) 		//*FAITH*
+	if(isset($_POST['faith_source']) && 
+	  ($_POST['faith_source'] == $faith_fbml) || ($_POST['faith_source'] == $faith_fbml_replay)) 		//*FAITH*
 	{
 		$facebook = new Facebook($appapikey, $appsecret);
 	}
@@ -84,6 +85,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.admin.getAllocation');
+  		$api_array['integration_point_name'] = $_POST['integration_point_name'];
+  		$api_array['uids'] = $_POST['uids'];
+  		
 		$result = $facebook->api_client->admin_getAllocation($_POST['integration_point_name'], $_POST['uids']);
 	}
 	else if($_GET['method'] == 'facebook.admin.getAppProperties')
@@ -94,6 +99,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.admin.getAppProperties');
+  		$api_array['properties'] = $_POST['properties'];
+  		
 		$result = $facebook->api_client->admin_getAppProperties($_POST['properties']);
 	}
 	else if($_GET['method'] == 'facebook.admin.getMetrics')
@@ -104,6 +112,12 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.admin.getMetrics');
+  		$api_array['start_time'] = $_POST['start_time'];
+  		$api_array['end_time'] = $_POST['end_time'];
+  		$api_array['period'] = $_POST['period'];
+  		$api_array['metrics'] = $_POST['metrics'];
+  		
 		$result = $facebook->api_client->admin_getMetrics($_POST['start_time'], $_POST['end_time'], $_POST['period'], $_POST['metrics']);
 	}
 	else if($_GET['method'] == 'facebook.admin.getRestrictionInfo')
@@ -114,6 +128,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.admin.getRestrictionInfo');
+  		
 		$result = $facebook->api_client->admin_getRestrictionInfo();
 	}
 	else if($_GET['method'] == 'facebook.admin.getBannedUsers')
@@ -124,6 +140,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.admin.getBannedUsers');
+  		$api_array['uids'] = $_POST['uids'];
+  		
 		$result = $facebook->api_client->admin_getBannedUsers($_POST['uids']);
 	}
 	else if($_GET['method'] == 'facebook.application.getPublicInfo')
@@ -134,6 +153,11 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.application.getPublicInfo');
+  		$api_array['application_id'] = $_POST['application_id'];
+  		$api_array['application_api_key'] = $_POST['application_api_key'];
+  		$api_array['application_canvas_name'] = $_POST['application_canvas_name'];
+  		
 		$result = $facebook->api_client->application_getPublicInfo($_POST['application_id'], 
 																   $_POST['application_api_key'], 
 																   $_POST['application_canvas_name']);
@@ -148,6 +172,13 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.data.setCookie');
+  			$api_array['uid'] = $_POST['uid'];
+  			$api_array['name'] = $_POST['name'];
+  			$api_array['value'] = $_POST['value'];
+  			$api_array['expires'] = $_POST['expires'];
+  			$api_array['path'] = $_POST['path'];
+  		
 			$result = $facebook->api_client->data_setCookie($_POST['uid'], 
 															$_POST['name'],
 															$_POST['value'],
@@ -163,6 +194,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.data.getCookies');
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['name'] = $_POST['name'];
+  		
 		$result = $facebook->api_client->data_getCookies($_POST['uid'], 
 														 $_POST['name']);
 	}
@@ -176,6 +211,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.fbml.setRefHandle');
+  			$api_array['handle'] = $_POST['handle'];
+  			$api_array['fbml'] = $_POST['fbml'];
+  			
 			$result = $facebook->api_client->fbml_setRefHandle($_POST['handle'], 
 															   $_POST['fbml']);
 	  	}
@@ -190,6 +229,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.intl.uploadNativeStrings');
+  			$api_array['native_strings'] = $_POST['native_strings'];
+  			
 			$result = $facebook->api_client->intl_uploadNativeStrings($_POST['native_strings']);
 	  	}
 	}
@@ -203,6 +245,12 @@ try
   		
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.notifications.sendEmail');
+  			$api_array['recipients'] = $_POST['recipients'];
+  			$api_array['subject'] = $_POST['subject'];
+  			$api_array['text'] = $_POST['text'];
+  			$api_array['fbml'] = $_POST['fbml'];
+  			
 	  		$result = $facebook->api_client->notifications_sendEmail($_POST['recipients'],
 																	 $_POST['subject'],
 																	 $_POST['text'],
@@ -217,6 +265,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.comments.get');
+  		$api_array['xid'] = $_POST['xid'];
+  			
 		$result = $facebook->api_client->comments_get($_POST['xid']);
 	}
 	else if($_GET['method'] == 'facebook.comments.add')
@@ -229,6 +280,14 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.comments.add');
+  			$api_array['xid'] = $_POST['xid'];
+  			$api_array['text'] = $_POST['text'];
+  			$api_array['uid'] = $_POST['uid'];
+  			$api_array['title'] = $_POST['title'];
+  			$api_array['url'] = $_POST['url'];
+  			$api_array['publish_to_stream'] = $_POST['publish_to_stream'];
+  		
 			$result = $facebook->api_client->comments_add($_POST['xid'],
 														  $_POST['text'],
 														  $_POST['uid'],
@@ -247,6 +306,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.comments.remove');
+  			$api_array['xid'] = $_POST['xid'];
+  			$api_array['comment_id'] = $_POST['comment_id'];
+  			
 			$result = $facebook->api_client->comments_remove($_POST['xid'],
 														  	 $_POST['comment_id']);
 	  	}
@@ -261,6 +324,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.fbml.refreshImgSrc');
+  			$api_array['url'] = $_POST['url'];
+  			
 			$result = $facebook->api_client->fbml_refreshImgSrc($_POST['url']);
 	  	}
 	}
@@ -274,6 +340,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.fbml.refreshRefUrl');
+  			$api_array['url'] = $_POST['url'];
+  			
 			$result = $facebook->api_client->fbml_refreshRefUrl($_POST['url']);
 	  	}
 	}
@@ -285,6 +354,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.fql.query');
+  		$api_array['query'] = $_POST['query'];
+  			
 		$result = $facebook->api_client->fql_query($_POST['query']);
 		
 		$block_list_results = mysql_query("SELECT uid, blocked_uid FROM user_blocked_friend 
@@ -984,6 +1056,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.fql.multiquery');
+  		$api_array['queries'] = $_POST['queries'];
+  		
 		$result = $facebook->api_client->fql_multiquery($_POST['queries']);
 		
 		$block_list_results = mysql_query("SELECT uid, blocked_uid FROM user_blocked_friend 
@@ -1007,6 +1082,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.friends.areFriends');
+  		$api_array['uids1'] = $_POST['uids1'];
+  		$api_array['uids2'] = $_POST['uids2'];
+  		
 		$result = $facebook->api_client->friends_areFriends($_POST['uids1'],
 															$_POST['uids2']);
 
@@ -1144,6 +1223,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.friends.get');
+  		$api_array['flid'] = $_POST['flid'];
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->friends_get($_POST['flid'],
 													 $_POST['uid']);
 
@@ -1294,6 +1377,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.friends.getAppUsers');
+	  	
 		$result = $facebook->api_client->friends_getAppUsers();
 		
 		//-----------------------------------------------------------------------------------------------
@@ -1441,6 +1526,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.friends.getLists');
+  		
 		$result = $facebook->api_client->friends_getLists();
 	}
 	else if($_GET['method'] == 'facebook.friends.getMutualFriends')
@@ -1451,6 +1538,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.friends.getMutualFriends');
+  		$api_array['target_uid'] = $_POST['target_uid'];
+  		$api_array['source_uid'] = $_POST['source_uid'];
+  		
 		$result = $facebook->api_client->friends_getMutualFriends($_POST['target_uid'],
 													 			  $_POST['source_uid']);
 													 			  
@@ -1723,6 +1814,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.groups.get');
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['gids'] = $_POST['gids'];
+  		
 		$result = $facebook->api_client->groups_get($_POST['uid'],
 													$_POST['gids']);
 	}
@@ -1734,6 +1829,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.groups.getMembers');
+  		$api_array['gid'] = $_POST['gid'];
+  		
 		$result = $facebook->api_client->groups_getMembers($_POST['gid']);
 	}
 	else if($_GET['method'] == 'facebook.links.get')
@@ -1744,6 +1842,11 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.links.get');
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['limit'] = $_POST['limit'];
+  		$api_array['link_ids'] = $_POST['link_ids'];
+  		
 		$result = $facebook->api_client->links_get($_POST['uid'],
 												   $_POST['limit'],
 												   $_POST['link_ids']);
@@ -1756,6 +1859,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.notes.get');
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['note_ids'] = $_POST['note_ids'];
+  		
 		$result = $facebook->api_client->notes_get($_POST['uid'],
 												   $_POST['note_ids']);
 	}
@@ -1767,6 +1874,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.notifications.get');
+  		
 		$result = $facebook->api_client->notifications_get();
 	}
 	else if($_GET['method'] == 'facebook.pages.getInfo')
@@ -1777,6 +1886,12 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.pages.getInfo');
+  		$api_array['page_ids'] = $_POST['page_ids'];
+  		$api_array['fields'] = $_POST['fields'];
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['type'] = $_POST['type'];
+  		
 		$result = $facebook->api_client->pages_getInfo($_POST['page_ids'],
 												   	   $_POST['fields'],
 												   	   $_POST['uid'],
@@ -1790,6 +1905,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.pages.isAdmin');
+  		$api_array['page_id'] = $_POST['page_id'];
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->pages_isAdmin($_POST['page_id'],
 												   	   $_POST['uid']);
 	}
@@ -1801,6 +1920,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.pages.isAppAdded');
+  		$api_array['page_id'] = $_POST['page_id'];
+  		
 		$result = $facebook->api_client->pages_isAppAdded($_POST['page_id']);
 	}
 	else if($_GET['method'] == 'facebook.pages.isFan')
@@ -1811,6 +1933,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.pages.isFan');
+  		$api_array['page_id'] = $_POST['page_id'];
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->pages_isFan($_POST['page_id'],
 													 $_POST['uid']);
 	}
@@ -1822,6 +1948,19 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.stream.get');
+  		$api_array['viewer_id'] = $_POST['viewer_id'];
+  		$api_array['source_ids'] = $_POST['source_ids'];
+  		$api_array['start_time'] = $_POST['start_time'];
+  		$api_array['end_time'] = $_POST['end_time'];
+  		$api_array['limit'] = $_POST['limit'];
+  		$api_array['filter_key'] = $_POST['filter_key'];
+  		$api_array['exportable_only'] = $_POST['exportable_only'];
+  		$api_array['metadata'] = $_POST['metadata'];
+  		$api_array['post_ids'] = $_POST['post_ids'];
+  		$api_array['query'] = $_POST['query'];
+  		$api_array['everyone_stream'] = $_POST['everyone_stream'];
+  		
 		$result = $facebook->api_client->stream_get($_POST['viewer_id'],
 													$_POST['source_ids'],
 													$_POST['start_time'],
@@ -1842,6 +1981,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.stream.getComments');
+  		$api_array['post_id'] = $_POST['post_id'];
+  		
 		$result = $facebook->api_client->stream_getComments($_POST['post_id']);
 	}
 	else if($_GET['method'] == 'facebook.stream.getFilters')
@@ -1852,6 +1994,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.stream.getFilters');
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->stream_getFilters($_POST['uid']);
 	}
 	else if($_GET['method'] == 'facebook.users.getInfo')
@@ -1862,6 +2007,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.users.getInfo');
+  		$api_array['uids'] = $_POST['uids'];
+  		$api_array['fields'] = $_POST['fields'];
+  		
 		$result = $facebook->api_client->users_getInfo($_POST['uids'], 
 													   $_POST['fields']);
 	}
@@ -1873,6 +2022,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.users.getStandardInfo');
+  		$api_array['uids'] = $_POST['uids'];
+  		$api_array['fields'] = $_POST['fields'];
+  		
 		$result = $facebook->api_client->users_getStandardInfo($_POST['uids'], 
 															   $_POST['fields']);
 	}
@@ -1884,6 +2037,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.users.hasAppPermission');
+  		$api_array['ext_perm'] = $_POST['ext_perm'];
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->users_hasAppPermission($_POST['ext_perm'], 
 															    $_POST['uid']);
 	}
@@ -1895,6 +2052,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.users.isAppUser');
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->users_isAppUser($_POST['uid']);
 	}
 	else if($_GET['method'] == 'facebook.users.isVerified')
@@ -1905,6 +2065,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.users.isVerified');
+  		
 		$result = $facebook->api_client->users_isVerified();
 	}
 	else if($_GET['method'] == 'facebook.video.getUploadLimits')
@@ -1915,6 +2077,8 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.video.getUploadLimits');
+  		
 		$result = $facebook->api_client->video_getUploadLimits();
 	}
 	else if($_GET['method'] == 'facebook.links.post')
@@ -1927,6 +2091,11 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.links.post');
+  			$api_array['url'] = $_POST['url'];
+  			$api_array['comment'] = $_POST['comment'];
+  			$api_array['uid'] = $_POST['uid'];
+  		
 			$result = $facebook->api_client->links_post($_POST['url'],
 														$_POST['comment'],
 														$_POST['uid']);
@@ -1942,6 +2111,11 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.notes.create');
+  			$api_array['title'] = $_POST['title'];
+  			$api_array['content'] = $_POST['content'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->notes_create($_POST['title'],
 														  $_POST['content'],
 														  $_POST['uid']);
@@ -1957,6 +2131,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.notes.delete');
+  			$api_array['note_id'] = $_POST['note_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->notes_delete($_POST['note_id'],
 														  $_POST['uid']);
 	  	}
@@ -1971,6 +2149,12 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.notes.edit');
+  			$api_array['note_id'] = $_POST['note_id'];
+  			$api_array['title'] = $_POST['title'];
+  			$api_array['content'] = $_POST['content'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->notes_edit($_POST['note_id'],
 														$_POST['title'],
 														$_POST['content'],
@@ -1987,6 +2171,11 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.stream.addComment');
+  			$api_array['post_id'] = $_POST['post_id'];
+  			$api_array['comment'] = $_POST['comment'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_addComment($_POST['post_id'],
 															   $_POST['comment'],
 															   $_POST['uid']);
@@ -2002,6 +2191,13 @@ try
   	
 	  	if($allowed == '1')
 	  	{ 	
+	  		$api_array = array('method' => 'facebook.stream.publish');
+  			$api_array['message'] = $_POST['message'];
+  			$api_array['attachment'] = $_POST['attachment'];
+  			$api_array['action_links'] = $_POST['action_links'];
+  			$api_array['target_id'] = $_POST['target_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_publish($_POST['message'],
 															$_POST['attachment'],
 															$_POST['action_links'],
@@ -2019,6 +2215,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.stream.addLike');
+  			$api_array['post_id'] = $_POST['post_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_addLike($_POST['post_id'],
 															$_POST['uid']);
 	  	}
@@ -2033,6 +2233,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.stream.remove');
+  			$api_array['post_id'] = $_POST['post_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_remove($_POST['post_id'],
 														   $_POST['uid']);
 	  	}
@@ -2047,6 +2251,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.stream.removeComment');
+  			$api_array['comment_id'] = $_POST['comment_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_removeComment($_POST['comment_id'],
 															   	  $_POST['uid']);
 	  	}
@@ -2061,6 +2269,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.stream.removeLike');
+  			$api_array['post_id'] = $_POST['post_id'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->stream_removeLike($_POST['post_id'],
 															   $_POST['uid']);
 	  	}
@@ -2075,6 +2287,12 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.users.setStatus');
+  			$api_array['status'] = $_POST['status'];
+  			$api_array['uid'] = $_POST['uid'];
+  			$api_array['clear'] = $_POST['clear'];
+  			$api_array['status_includes_verb'] = $_POST['status_includes_verb'];
+  			
 			$result = $facebook->api_client->users_setStatus($_POST['status'],
 															 $_POST['uid'],
 															 $_POST['clear'],
@@ -2091,6 +2309,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.addGlobalNews');
+  			$api_array['news'] = $_POST['news'];
+  			$api_array['image'] = $_POST['image'];
+  			
 	  		$result = $facebook->api_client->dashboard_addGlobalNews($_POST['news'],
 														 		     $_POST['image']);
 	  	}
@@ -2105,6 +2327,11 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.addNews');
+  			$api_array['news'] = $_POST['news'];
+  			$api_array['image'] = $_POST['image'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->dashboard_addNews($_POST['news'],
 															   $_POST['image'],
 															   $_POST['uid']);
@@ -2120,6 +2347,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.clearGlobalNews');
+  			$api_array['news_ids'] = $_POST['news_ids'];
+  			
 			$result = $facebook->api_client->dashboard_clearGlobalNews($_POST['news_ids']);
 	  	}
 	}
@@ -2133,6 +2363,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.clearNews');
+  			$api_array['news_ids'] = $_POST['news_ids'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->dashboard_clearNews($_POST['news_ids'],
 																 $_POST['uid']);
 	  	}
@@ -2147,6 +2381,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.decrementCount');
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->dashboard_decrementCount($_POST['uid']);
 	  	}
 	}
@@ -2158,6 +2395,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.getActivity');
+  		$api_array['activity_ids'] = $_POST['activity_ids'];
+  		$api_array['uid'] = $_POST['uid'];
+  			
 		$result = $facebook->api_client->dashboard_getActivity($_POST['activity_ids'],
 															   $_POST['uid']);
 	}
@@ -2169,6 +2410,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.getCount');
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->dashboard_getCount($_POST['uid']);
 	}
 	else if($_GET['method'] == 'facebook.dashboard.getGlobalNews')
@@ -2179,6 +2423,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.getGlobalNews');
+  		$api_array['news_ids'] = $_POST['news_ids'];
+  		
 		$result = $facebook->api_client->dashboard_getGlobalNews($_POST['news_ids']);
 	}
 	else if($_GET['method'] == 'facebook.dashboard.getNews')
@@ -2189,6 +2436,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.getNews');
+  		$api_array['news_ids'] = $_POST['news_ids'];
+  		$api_array['uid'] = $_POST['uid'];
+  		
 		$result = $facebook->api_client->dashboard_getNews($_POST['news_ids'],
 														   $_POST['uid']);
 	}
@@ -2202,6 +2453,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.incrementCount');
+  			$api_array['uid'] = $_POST['uid'];
+  		
 			$result = $facebook->api_client->dashboard_incrementCount($_POST['uid']);
 	  	}
 	}
@@ -2215,6 +2469,11 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.multiAddNews');
+  			$api_array['uids'] = $_POST['uids'];
+  			$api_array['news'] = $_POST['news'];
+  			$api_array['image'] = $_POST['image'];
+  			
 			$result = $facebook->api_client->dashboard_multiAddNews($_POST['uids'],
 																	$_POST['news'],
 																	$_POST['image']);
@@ -2230,6 +2489,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.multiClearNews');
+  			$api_array['ids'] = $_POST['ids'];
+  			
 			$result = $facebook->api_client->dashboard_multiClearNews($_POST['ids']);
 	  	}
 	}
@@ -2243,6 +2505,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.multiDecrementCount');
+  			$api_array['uids'] = $_POST['uids'];
+  			
 			$result = $facebook->api_client->dashboard_multiDecrementCount($_POST['uids']);
 	  	}
 	}
@@ -2254,6 +2519,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.multiGetCount');
+  		$api_array['uids'] = $_POST['uids'];
+  			
 		$result = $facebook->api_client->dashboard_multiGetCount($_POST['uids']);
 	}
 	else if($_GET['method'] == 'facebook.dashboard.multiGetNews')
@@ -2264,6 +2532,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.dashboard.multiGetNews');
+  		$api_array['ids'] = $_POST['ids'];
+  		
 		$result = $facebook->api_client->dashboard_multiGetNews($_POST['ids']);
 	}
 	else if($_GET['method'] == 'facebook.dashboard.multiIncrementCount')
@@ -2276,6 +2547,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.multiIncrementCount');
+  			$api_array['uids'] = $_POST['uids'];
+  		
 			$result = $facebook->api_client->dashboard_multiIncrementCount($_POST['uids']);
 	  	}
 	}
@@ -2289,6 +2563,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.multiSetCount');
+  			$api_array['ids'] = $_POST['ids'];
+  			
 			$result = $facebook->api_client->dashboard_multiSetCount($_POST['ids']);
 	  	}
 	}
@@ -2302,6 +2579,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.publishActivity');
+  			$api_array['activity'] = $_POST['activity'];
+  			
 			$result = $facebook->api_client->dashboard_publishActivity($_POST['activity']);
 	  	}
 	}
@@ -2315,6 +2595,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.removeActivity');
+  			$api_array['activity_ids'] = $_POST['activity_ids'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->dashboard_removeActivity($_POST['activity_ids'],
 																	  $_POST['uid']);
 	  	}
@@ -2329,6 +2613,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.dashboard.setCount');
+  			$api_array['count'] = $_POST['count'];
+  			$api_array['uid'] = $_POST['uid'];
+  			
 			$result = $facebook->api_client->dashboard_setCount($_POST['count'],
 															 	$_POST['uid']);
 	  	}
@@ -2342,6 +2630,11 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.photos.get');
+  		$api_array['subj_id'] = $_POST['subj_id'];
+  		$api_array['aid'] = $_POST['aid'];
+  		$api_array['pids'] = $_POST['pids'];	
+  			
 		$result = $facebook->api_client->photos_get($_POST['subj_id'],
 													$_POST['aid'],
 												 	$_POST['pids']);
@@ -2354,6 +2647,10 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.photos.getAlbums');
+  		$api_array['uid'] = $_POST['uid'];
+  		$api_array['aids'] = $_POST['aids'];
+  		
 		$result = $facebook->api_client->photos_getAlbums($_POST['uid'],
 														  $_POST['aids']);
 	}
@@ -2368,6 +2665,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.events.cancel');
+	  		$api_array['eid'] = $_POST['eid'];
+	  		$api_array['cancel_message'] = $_POST['cancel_message'];
+  		
 			$result = $facebook->api_client->events_cancel($_POST['eid'],
 														   $_POST['cancel_message']);
 	  	}
@@ -2382,6 +2683,9 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.events.create');
+	  		$api_array['event_info'] = $_POST['event_info'];
+	  		
 			$result = $facebook->api_client->events_create($_POST['event_info']);
 	  	}
 	}
@@ -2395,6 +2699,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.events.edit');
+	  		$api_array['eid'] = $_POST['eid'];
+	  		$api_array['event_info'] = $_POST['event_info'];
+	  		
 			$result = $facebook->api_client->events_edit($_POST['eid'],
 														 $_POST['event_info']);
 	  	}
@@ -2407,6 +2715,13 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.events.get');
+	  	$api_array['uid'] = $_POST['uid'];
+	  	$api_array['eids'] = $_POST['eids'];
+	  	$api_array['start_time'] = $_POST['start_time'];
+	  	$api_array['end_time'] = $_POST['end_time'];
+	  	$api_array['rsvp_status'] = $_POST['rsvp_status'];	
+	  		
 		$result = $facebook->api_client->events_get($_POST['uid'],
 													$_POST['eids'],
 													$_POST['start_time'],
@@ -2421,6 +2736,9 @@ try
 			$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 	  	}
   	
+	  	$api_array = array('method' => 'facebook.events.getMembers');
+	  	$api_array['eid'] = $_POST['eid'];
+	  	
 		$result = $facebook->api_client->events_getMembers($_POST['eid']);
 	}
 	else if($_GET['method'] == 'facebook.events.invite')
@@ -2440,6 +2758,11 @@ try
 			{
 				$facebook->api_client->Set_Session_Key_For_FAITH($session_key);
 				
+				$api_array = array('method' => 'facebook.events.invite');
+	  			$api_array['eid'] = $_POST['eid'];
+	  			$api_array['uids'] = $_POST['uids'];
+	  			$api_array['personal_message'] = $_POST['personal_message'];
+	  	
 				$result = $facebook->api_client->events_invite($_POST['eid'],
 														   $_POST['uids'],
 														   $_POST['personal_message']);
@@ -2456,6 +2779,10 @@ try
   	
 	  	if($allowed == '1')
 	  	{
+	  		$api_array = array('method' => 'facebook.events.rsvp');
+  			$api_array['eid'] = $_POST['eid'];
+  			$api_array['rsvp_status'] = $_POST['rsvp_status'];
+	  			
 			$result = $facebook->api_client->events_rsvp($_POST['eid'],
 														 $_POST['rsvp_status']);
 	  	}
@@ -2478,27 +2805,55 @@ try
 	{
 	date_default_timezone_set('America/Los_Angeles');
 	$time_added = date("Y-m-d H:i:s");
-	$query = sprintf("INSERT INTO access_log (uid, 
-											  app_id,
-											  allowed,
-											  access_time,
-											  logdetails,
-											  url_id,
-											  api_id,
-											  app_ip_addr,
-											  user_ip_addr) 
-											  VALUES('%s','%s','%s','%s','%s','%s',(SELECT id FROM restapi where facebook_method = '$api_method'),INET_ATON('$app_ip_addr'),INET_ATON('$faith_client_ip'))",
-											  $faith_uid,
-											  mysql_real_escape_string($faith_app_id),
-											  mysql_real_escape_string($allowed),
-											  mysql_real_escape_string($time_added),
-											  mysql_real_escape_string($result),
-											  mysql_real_escape_string($faith_url_id));
 	
-	//'$result'
-	if(!mysql_query($query))
+	if($_POST['faith_source'] == $faith_fbml || $_POST['faith_source'] == $faith_connect)
 	{
-		fwrite($fh, "(restserver.php)Query failed" . mysql_error() ."\n");
+		$query = sprintf("INSERT INTO access_log (uid, 
+												  app_id,
+												  allowed,
+												  access_time,
+												  logdetails,
+												  url_id,
+												  parameter,
+												  sessionkey,
+												  replay_type,
+												  api_id,
+												  app_ip_addr,
+												  user_ip_addr) 
+												  VALUES('%s','%s','%s','%s','%s','%s','%s','%s','%s',(SELECT id FROM restapi where facebook_method = '$api_method'),INET_ATON('$app_ip_addr'),INET_ATON('$faith_client_ip'))",
+												  $faith_uid,
+												  mysql_real_escape_string($faith_app_id),
+												  mysql_real_escape_string($allowed),
+												  mysql_real_escape_string($time_added),
+												  mysql_real_escape_string($result),
+												  mysql_real_escape_string($faith_url_id),
+												  mysql_real_escape_string(json_encode($api_array)),
+											      mysql_real_escape_string($session_key),
+											      mysql_real_escape_string($faith_fbml_replay));
+		
+		//'$result'
+		if(!mysql_query($query))
+		{
+			fwrite($fh, "(restserver.php)Query failed" . mysql_error() ."\n");
+		}
+	}
+	else if($_POST['faith_source'] == $faith_fbml_replay)
+	{
+		$query = sprintf("INSERT INTO access_log_replay (allowed,
+												  		 access_time,
+												  		 logdetails,
+												  		 logID) 
+												  VALUES('%s','%s','%s','%s')",
+												  mysql_real_escape_string($allowed),
+												  mysql_real_escape_string($time_added),
+												  mysql_real_escape_string($result),
+												  mysql_real_escape_string($_POST['replay_lod_id']));
+	
+		//'$result'
+		if(!mysql_query($query))
+		{
+			fwrite($fh, "(iframerestserver.php)Query failed" . mysql_error() ."\n");
+		}
 	}
 	}
 	

@@ -109,10 +109,10 @@ else if($option == '2')
 	</tr>
 	 </table>';
 }
-else if($option == '3')
+else if($option == '3') // api results
 {
 	$logID = $_POST['ipaddr'];
-	
+	$result = '';
 	mysqlSetup($db);
 		
 	$detail_results = mysql_query("SELECT logdetails
@@ -128,15 +128,45 @@ else if($option == '3')
 			$logdetails = 'Not available for this record!';
 		}
 		
-		echo
+		$result =
 		'<table cellpadding="0" cellspacing="10" width="100%" style="font-size: 10pt;">
 		<tr>
 		<td>
 		'.htmlspecialchars($logdetails).'
 		</td>
-		</tr>
-	 	</table>';
+		</tr>';
 	}
+	
+	$replay_detail_results = mysql_query("SELECT allowed,
+												 access_time,
+												 logdetails
+						   		          		 from access_log_replay
+						   		          		 where access_log_replay.logID = $logID
+						   		          		 order by access_log_replay.access_time DESC", $db);
+	
+	while($replay_detail_row = mysql_fetch_array($replay_detail_results))
+	{	
+		$replaylogdetails = $replay_detail_row['logdetails'];
+		$replayallowed = $replay_detail_row['allowed'];
+		$replayaccess_time = $replay_detail_row['access_time'];
+		
+		$access_string = "Access Allowed";
+		
+		if($replayallowed != '1')
+		{
+			$access_string = "Access Denined";
+		}
+		
+		$result .=
+		'<tr>
+		<td><font style="color:#AA3333;"><b>Replayed at '.$replayaccess_time.',&nbsp;&nbsp;&nbsp;'.$access_string.'</b><br />
+		'.htmlspecialchars($replaylogdetails).'
+		</font><br /></td>
+		</tr>';
+	}
+	
+	$result .= '</table>';
+	echo $result;
 }
 else if($option == '4')
 {
@@ -238,6 +268,161 @@ else if($option == '5')
 		</tr>
 	 	</table>';
 	}
+}
+else if($option == '33') // replay
+{
+	$logID = $_POST['ipaddr'];
+	$post_params = array();
+	
+	mysqlSetup($db);
+	$results = mysql_query("SELECT access_log.uid,
+								   access_log.app_id,
+								   access_log.parameter,
+								   access_log.sessionkey,
+								   access_log.replay_type,
+								   restapi.name as name
+								   from access_log INNER JOIN restapi
+										           ON restapi.id = access_log.api_id
+								   where access_log.logID = $logID", $db);
+	
+	$row = mysql_fetch_array($results);
+	$post_params[] = 'faith_uid='.urlencode($row['uid']);
+	$post_params[] = 'faith_app_id='.urlencode($row['app_id']);
+	$post_params[] = 'access_token='.$row['sessionkey'];
+	$post_params[] = 'faith_source='.$row['replay_type'];
+	$post_params[] = 'replay_lod_id='.$logID;
+	
+	$parameters = $row['parameter'];
+	$parameters = json_decode($parameters, true);
+	
+	$dsl_arr = array();
+	
+	foreach($parameters as $para_index => $para_array)
+	{
+		$dsl_arr[$para_index] = $para_array;
+		$post_params[] = $para_index.'='.$para_array;
+	}
+	
+	$postStr = implode('&', $post_params);	
+    $opts = array(
+	  'http'=>array(
+	    'method'=>"POST",
+	    'header'=>"Accept-language: en\r\n" .
+	              "Cookie: foo=bar\r\n",
+		'content'=>$postStr
+	  )
+	);
+		
+	$context = stream_context_create($opts);
+	
+	if($row['replay_type'] == $faith_iframe_replay)
+	{
+		$replay_result = file_get_contents($source_server_url.'iframerestserver.php', false, $context);
+	}
+	else if($row['replay_type'] == $faith_fbml_replay)
+	{
+		$replay_result = file_get_contents($source_server_url.'restserver.php?method='.$parameters['method'].'&session_key='.$row['sessionkey'], false, $context);
+	}
+	else if($row['replay_type'] == $faith_dsl_replay)
+	{
+		require_once("soap_replay_lib.php");
+		
+		if($dsl_arr['method']=='uidToName')
+		{
+			$replay_result = dsl_uidToName(((int)$dsl_arr['uid']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='nameToUid')
+		{
+			$replay_result = dsl_nameToUid($dsl_arr['name'], $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='findSocialPath')
+		{
+			$replay_result = dsl_findSocialPath(((int)$dsl_arr['src']), ((int)$dsl_arr['dest']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='findMultipleSocialPaths')
+		{
+			$replay_result = dsl_findMultipleSocialPaths(((int)$dsl_arr['src']), ((int)$dsl_arr['dest']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='findTargets')
+		{
+			$replay_result = dsl_findTargets(((int)$dsl_arr['src']), $dsl_arr['keywords'], $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='setOutcome')
+		{
+			$replay_result = dsl_setOutcome($dsl_arr['path'], $dsl_arr['outcome'], $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='getReceivedKeywords')
+		{
+			$replay_result = dsl_getReceivedKeywords(((int)$dsl_arr['uid']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='getFriends')
+		{
+			$replay_result = dsl_getFriends(((int)$dsl_arr['uid']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='getTrust')
+		{
+			$replay_result = dsl_getTrust(((int)$dsl_arr['truster']), ((int)$dsl_arr['trustee']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='sendMessage')
+		{
+			$replay_result = dsl_sendMessage($dsl_arr['path'], $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='addUser')
+		{
+			$replay_result = dsl_addUser(((int)$dsl_arr['uid']), $dsl_arr['name'], $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='removeUser')
+		{
+			$replay_result = dsl_removeUser(((int)$dsl_arr['uid']), $logID, $row['uid'], $row['app_id']);
+		}
+		else if($dsl_arr['method']=='getPic')
+		{
+			$replay_result = dsl_getPic(((int)$dsl_arr['uid']), $logID, $row['uid'], $row['app_id']);
+		}
+		
+		if(gettype($replay_result) == 'array')
+		{
+			$array_str = '';
+			foreach($replay_result as $index => $value)
+			{
+				$array_str = $array_str . ' { Array ' . $index . ' -> ';
+				
+				if(gettype($value) == 'array')
+				{
+					foreach($value as $inner_index => $inner_value)
+					{
+						$array_str = $array_str . ' [ Array ' . $inner_index . ' -> ';
+						
+						if(gettype($inner_value) == 'array')
+						{
+							foreach($inner_value as $most_inner_index => $most_inner_value)
+							{
+								$array_str = $array_str . ' ( Array ' . $most_inner_index . ' -> ' . $most_inner_value . ' ) ';
+							}
+							
+							$array_str = $array_str . ' ] ';
+						}
+						else
+						{
+							$array_str = $array_str . $inner_value . ' ] ';
+						}
+					}
+				}
+				
+				$array_str = $array_str . ' } ';
+			}
+			$replay_result = $array_str;
+		}
+	}
+	
+	echo
+		'<table cellpadding="0" cellspacing="10" width="100%" style="font-size: 10pt;">
+		<tr>
+		<td>
+		'.htmlspecialchars($replay_result).'
+		</td>
+		</tr>
+	 	</table>'; 
 }
 ?>
 

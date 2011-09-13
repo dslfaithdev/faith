@@ -95,6 +95,7 @@
 			<tr>
 				<td>
 				<form action="set_policy_transform_remove.php" method="post">
+<?/*FER edit.				
 				<fb:friend-selector
 				
 				<?php
@@ -106,6 +107,12 @@
 				echo 'uid="'.$user_id.'"';
 				    ?>
 				name="block_friend_selector" idname="block_friend_selector"></fb:friend-selector>
+*/?>
+							<font style="padding-left: 15px; padding-right: 15px;font-weight: bold;Color: #AA3333;">
+							Add an uid from <fb:name uid="<?= $user_id ?>" useyou="false" linked="true" /> friends to create a Social Network Transformation.
+							</font><br/>
+							<input type="text" name="block_friend_selector" id="block_friend_selector"/>
+
 				<INPUT type="submit" id="block_friend" name = "block_friend_submit" value="Add" />
 				</form>
 				</td>

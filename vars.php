@@ -15,8 +15,11 @@ $iframe_appapikey = '7c618ec52efbbe484d7f9dd24c746161'; 	// '7c618ec52efbbe484d7
 $iframe_appsecret = '18b0533d96d25ad4e23ca8386039b6c4';		// '18b0533d96d25ad4e23ca8386039b6c4'
 
 $faith_fbml = '1';
+$faith_fbml_replay = '11';
 $faith_connect = '2';
 $faith_iframe = '3';
+$faith_iframe_replay = '33';
+$faith_dsl_replay = '44';
 
 //URLs & Paths
 $source_server_url = "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"; 			// "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"

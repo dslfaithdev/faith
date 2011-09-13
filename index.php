@@ -87,7 +87,7 @@ require_once 'facebook.php';
 try
 {	
 	$facebook = new Facebook($appapikey, $appsecret);
-	$user_id = $facebook->require_login($required_permissions = 'publish_stream,email,create_event,read_stream,sms,rsvp_event,offline_access');
+	$user_id = $facebook->require_login($required_permissions = 'publish_stream,email,create_event,read_stream,rsvp_event,offline_access');
 		
 	if(isset($_GET['ffile']) && isset($_GET['fpro']))
 	{
@@ -352,8 +352,11 @@ function get_home_page_contents($user_id)
 function get_live_search_contents($user_id)
 {
 	GLOBAL $source_server_url;
-	$search_text = $_POST['search_txt'];
-	
+//Edited by FER 
+	isset($_POST['search_txt'])	? $search_text =$_POST['search_txt']:$search_text="";
+	//$search_text = $_POST['search_txt'];
+//End edit by FER
+
 	return
 	'
 	<tr>
@@ -387,9 +390,7 @@ function get_live_search_contents($user_id)
 		<a style="padding-right:15px;padding-left:15px;" href="http://www.ucdavis.edu/" target="_blank">
 		<img src="'.$source_server_url.'image/uc-davis.jpg" style="border-style: none" />
 		</a>
-		<a style="padding-right:15px;padding-left:15px;" href="http://dsl.cs.ucdavis.edu/lab_website/index.php" target="_blank">
-		<img src="'.$source_server_url.'image/dsl.jpg" style="border-style: none" />
-		</a>
+		<img src="'.$source_server_url.'image/ns_CTA.png" style="border-style: none" />
 		</div>
 		</td></tr>
 		</table>
