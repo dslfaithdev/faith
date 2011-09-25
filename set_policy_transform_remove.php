@@ -1,4 +1,5 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" dir="ltr" lang="en-US">
 <head>
 <title> Welcome to DSL FAITH </title>
 <style type="text/css">
@@ -94,8 +95,8 @@
 			<table width="100%">
 			<tr>
 				<td>
-				<form action="set_policy_transform_remove.php" method="post">
-<?/*FER edit.				
+<fb:fbml version="1.1">
+<fb:editor action="set_policy_transform_remove.php">
 				<fb:friend-selector
 				
 				<?php
@@ -107,14 +108,11 @@
 				echo 'uid="'.$user_id.'"';
 				    ?>
 				name="block_friend_selector" idname="block_friend_selector"></fb:friend-selector>
-*/?>
-							<font style="padding-left: 15px; padding-right: 15px;font-weight: bold;Color: #AA3333;">
-							Add an uid from <fb:name uid="<?= $user_id ?>" useyou="false" linked="true" /> friends to create a Social Network Transformation.
-							</font><br/>
-							<input type="text" name="block_friend_selector" id="block_friend_selector"/>
-
-				<INPUT type="submit" id="block_friend" name = "block_friend_submit" value="Add" />
-				</form>
+<fb:editor-buttonset>
+<fb:editor-button value="Add" name="block_friend_submit"/>
+</fb:editor-buttonset>
+</fb:editor>
+</fb:fbml>
 				</td>
 			</tr>
 			</table>
