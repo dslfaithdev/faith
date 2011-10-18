@@ -108,7 +108,7 @@ try
 	
 	mysqlSetup($db);
 	
-	if(!$_GET['api_id'])
+	if(!isset($_GET['api_id']))
 	{
 		$results = mysql_query("SELECT id, 
 									   name 

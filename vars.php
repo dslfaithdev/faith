@@ -6,6 +6,24 @@
  *          such as the API key, the path vs. weight variable, etc.
  *
  *****************************************************************************/
+//PHP debug.
+// Turn off all error reporting
+error_reporting(0);
+
+// Report simple running errors
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
+// Reporting E_NOTICE can be good too (to report uninitialized
+// variables or catch variable name misspellings ...)
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
+// Report all errors except E_NOTICE
+// This is the default value set in php.ini
+//error_reporting(E_ALL ^ E_NOTICE);
+
+// Report all PHP errors (see changelog)
+//error_reporting(E_ALL);
+
 
 //Facebook API variables
 $appapikey = '552820d26044c5326c72dc8c7fbfedfc';	// '552820d26044c5326c72dc8c7fbfedfc'
@@ -22,14 +40,14 @@ $faith_iframe_replay = '33';
 $faith_dsl_replay = '44';
 
 //URLs & Paths
-$source_server_url = "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"; 			// "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"
+$source_server_url = "http://faith.garm.comlab.bth.se/faith/"; 			// "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/"
 $facebook_canvas_page_url = "http://apps.facebook.com/dsl_faith/"; 				// "http://apps.facebook.com/dsl_faith/"
-$facebook_canvas_page_url = "http://cyrus.cs.ucdavis.edu/~dslfaith/faith/";  				// "http://apps.facebook.com/dsl_faith/"
 $facebook_iframe_canvas_page_url = "http://apps.facebook.com/dsl_faith_iframe/"; 	// "http://apps.facebook.com/dsl_faith_iframe/"
-$source_folder_path = "/home/dslfaith/public_html/faith/";							// "/home/dslfaith/public_html/faith/"
+//$facebook_canvas_page_url = $facebook_iframe_canvas_page_url;
+$source_folder_path = "/usr/local/www/vhosts/faith.garm.comlab.bth.se/htdocs/faith/";							// "/home/dslfaith/public_html/faith/"
 
 //MySQL Database Info
-$dbHost = "localhost";
+$dbHost = "127.0.0.1:3307";
 $dbUsername = "leeru";
 $dbPassword = "92660341";
 $dbName = "leeru";
@@ -37,10 +55,13 @@ $dbName = "leeru";
 //FAITH variables
 $rowsPerPage = 10;
 $callbackurl='http://cyrus.cs.ucdavis.edu/~dslfaith/faith/select_app_live_search.php';
+$callbackurl='https://faith.garm.comlab.bth.se/faith/select_app_live_search.php';
 // 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/select_app_live_search.php'
 $view_history_callbackurl='http://cyrus.cs.ucdavis.edu/~dslfaith/faith/view_history_live_search.php';
+$view_history_callbackurl='https://faith.garm.comlab.bth.se/faith/view_history_live_search.php';
 // 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/view_history_live_search.php'
 $set_policy_transform_callbackurl='http://cyrus.cs.ucdavis.edu/~dslfaith/faith/set_policy_transform_live_search.php';
+$set_policy_transform_callbackurl='https://faith.garm.comlab.bth.se/faith/set_policy_transform_live_search.php';
 // 'http://cyrus.cs.ucdavis.edu/~dslfaith/faith/set_policy_transform_live_search.php'
 
 //Social Graph variables
